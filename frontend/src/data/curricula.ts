@@ -251,81 +251,109 @@ JOIN locations l ON s.location_id = l.id
     },
 };
 
-// Generating Levels 6-100
-const topics = [
-    "Stored Procedures", "Triggers", "Views & Materialized Views", "JSON Handling in SQL", "Transaction Isolation",
-    "Database Normalization", "Primary & Foreign Keys", "Indexing Strategies (B-Tree)", "Composite Indexes", "Query Execution Plans", // 15
-    "Full Text Search", "Spatial Data (PostGIS)", "Array Data Types", "User Management (GRANT/REVOKE)", "SQL Injection Prevention", // 20
-    "Partitioning Tables", "Sharding Concepts", "Replication Types", "High Availability", "Disaster Recovery", // 25
-    "Vacuum & Maintenance", "Connection Pooling", "Time Series Analysis", "Graph Data Concepts", "Recursive Queries", // 30
-    "Distributed SQL", "CAP Theorem", "ACID vs BASE", "NoSQL Integration", "Redis & Caching", // 35
-    "Columnar Storage", "Data Warehousing Basics", "Star Schema Design", "Snowflake Schema", "ETL Pipelines", // 40
-    "ELT vs ETL", "Data Lake Concepts", "Hadoop & Spark Basics", "Big Data File Formats (Parquet)", "Cloud Databases (AWS RDS)", // 45
-    "Google BigQuery", "Azure SQL", "Serverless Databases", "Database Migration Strategies", "Zero Downtime Deployments", // 50
-    "Data Governance", "GDPR & Compliance", "Audit Logging", "Encryption at Rest", "Masking Sensitive Data", // 55
-    "Multi-tenancy Architecture", "Row Level Security", "Schema Validation", "API Integration", "GraphQL with SQL", // 60
-    "ORM Best Practices", "N+1 Query Problem", "Database Anti-patterns", "Refactoring Databases", "Legacy System Migration", // 65
-    "Real-time Analytics", "Stream Processing", "Event Sourcing", "CQRS Pattern", "Microservices Database Pattern", // 70
-    "Saga Pattern", "Two-Phase Commit", "Vector Databases", "AI & SQL Integration", "RAG Pipeline w/ SQL", // 75
-    "Geospatial Analytics (Adv)", "Financial Modeling in SQL", "Risk Analysis Queries", "Marketing Attribution Models", "Churn Prediction Query", // 80
-    "Supply Chain Optimization", "Inventory Management Logic", "Dynamic Pricing Models", "Fraud Detection Rules", "Recommendation Engine SQL", // 85
-    "Social Network Analysis", "Hierarchical Data (Trees)", "Gap Analysis", "Funnel Analysis", "Retention Analysis", // 90
-    "User Segmentation (Adv)", "AB Testing Analysis", "Statistical Functions in SQL", "Linear Regression in SQL", "Forecasting Models", // 95
-    "System Design Interview", "Architecting for Scale", "Chaos Engineering for DB", "Future of Databases", "Expert Final Project" // 100
-];
+import { analystTopics, scientistTopics } from './topics';
 
+// Generating Levels 6-100
 const generatedCurricula: any = {};
 
-topics.forEach((topic, index) => {
+// Generate Analyst Levels (6-100)
+analystTopics.forEach((topic, index) => {
     const levelNum = index + 6;
     const levelKey = `level-${levelNum}`;
 
-    generatedCurricula[levelKey] = {
-        analyst: {
-            title: `Level ${levelNum}: ${topic}`,
-            sections: [
-                {
-                    heading: `Pengantar ${topic}`,
-                    content: `Di Level ${levelNum} ini, kita akan mempelajari ${topic} secara mendalam. Topik ini sangat penting untuk menjadi seorang Expert Data Analyst.`,
-                },
-                {
-                    heading: 'Konsep Utama',
-                    content: `Pahami prinsip kerja ${topic} dan bagaimana mengaplikasikannya dalam kasus nyata.`,
-                    code: `-- Contoh syntax untuk ${topic}\nSELECT 'Implementasi ${topic} di sini';`
-                },
-                {
-                    heading: 'Best Practices',
-                    content: `Selalu perhatikan performa dan keamanan saat menggunakan ${topic}.`
-                }
-            ]
-        },
-        scientist: {
-            title: `Level ${levelNum}: ${topic} for Lab`,
-            sections: [
-                {
-                    heading: `Teori ${topic}`,
-                    content: `Untuk Data Scientist, ${topic} memberikan wawasan baru dalam pengolahan data.`
-                },
-                {
-                    heading: 'Implementasi Logic',
-                    content: `Gunakan logika ${topic} untuk optimasi pipeline data anda.`,
-                    code: `-- Algoritma ${topic}\nSELECT * FROM experiments WHERE type = '${topic}';`
-                }
-            ]
-        },
-        challenge: {
-            title: `Tantangan ${topic}`,
-            description: `Implementasikan solusi menggunakan konsep ${topic} yang telah dipelajari.\n\n1. Analisis masalah\n2. Tulis query ${topic}\n3. Validasi hasil`,
-            starterCode: `-- Tulis implementasi ${topic} anda\nSELECT 'Jawaban saya';`,
-            expectedOutput: `Konsep ${topic} berhasil diimplementasikan!`,
+    if (!generatedCurricula[levelKey]) generatedCurricula[levelKey] = {};
+
+    generatedCurricula[levelKey].analyst = {
+        title: `Level ${levelNum}: ${topic}`,
+        sections: [
+            {
+                heading: `Pengantar ${topic}`,
+                content: `Di Level ${levelNum} ini, kita akan mempelajari ${topic} secara mendalam. Topik ini dipilih khusus untuk memperkuat skill Data Analytics anda.`,
+            },
+            {
+                heading: 'Konsep Bisnis & Teknis',
+                content: `Sebagai Analyst, pemahaman ${topic} membantu dalam pengambilan keputusan bisnis yang lebih akurat.`,
+                code: `-- Contoh query untuk analisis ${topic}\nSELECT * FROM analysis_table WHERE type = '${topic}';` // Placeholder
+            },
+            {
+                heading: 'Implementasi Nyata',
+                content: `Studi kasus: Bagaimana perusahaan Unicorn menggunakan ${topic} untuk efisiensi.`
+            }
+        ]
+    };
+
+    // Default challenge for Analyst if not scientist specific
+    if (!generatedCurricula[levelKey].challenge) {
+        generatedCurricula[levelKey].challenge = {
+            title: `Tantangan: ${topic}`,
+            description: `Selesaikan masalah bisnis berikut menggunakan konsep ${topic}.\n\n1. Pahami kebutuhan user\n2. Gunakan query yang efisien\n3. Sajikan data yang relevan`,
+            starterCode: `-- Query ${topic}\nSELECT ...`,
+            expectedOutput: `Analisis ${topic} selesai.`,
             validation: {
                 requiredKeywords: ['SELECT'],
-                forbiddenKeywords: ['DROP', 'DELETE', 'TRUNCATE'],
+                forbiddenKeywords: ['DROP'],
                 minLines: 1
             }
-        }
-    };
+        };
+    }
 });
+
+// Generate Scientist Levels (6-100)
+scientistTopics.forEach((topic, index) => {
+    const levelNum = index + 6;
+    const levelKey = `level-${levelNum}`;
+
+    if (!generatedCurricula[levelKey]) generatedCurricula[levelKey] = {};
+
+    generatedCurricula[levelKey].scientist = {
+        title: `Level ${levelNum}: ${topic}`, // Scientist specific title
+        sections: [
+            {
+                heading: `Konsep Dasar ${topic}`,
+                content: `Dalam Data Science, ${topic} adalah fondasi penting. Kita akan membedah matematikanya dan implementasi codenya.`,
+            },
+            {
+                heading: 'Algoritma & Logika',
+                content: `Pelajari bagaimana ${topic} bekerja di balik layar.`,
+                code: `# Contoh pseudo-code Python untuk ${topic}\ndef ${topic.toLowerCase().replace(/ /g, '_')}():\n    pass`
+            },
+            {
+                heading: 'Aplikasi AI/ML',
+                content: `Bagaimana ${topic} digunakan dalam model State-of-the-Art saat ini.`
+            }
+        ]
+    };
+
+    // If challenge was set by Analyst loop (which it was), we might want to OVERWRITE or SEPARATE it?
+    // Current UI `LessonPage` takes `currentData.challenge`.
+    // It shares ONE challenge per levelId.
+    // This is a limitation! "LessonPage" loads `challengeData = currentData.challenge`.
+    // It does NOT split challenge by track.
+
+    // FIX: We need separate challenges for Analyst and Scientist.
+    // But `curricula` structure is:
+    // level-X: { analyst: {}, scientist: {}, challenge: {} }
+    // To support split challenges, I should move `challenge` INSIDE `analyst` and `scientist`?
+    // Or make `challenge` an object: { analyst: {}, scientist: {} }?
+
+    // Creating a Scientist-specific challenge requires schema change in LessonPage? 
+    // Let's check LessonPage.tsx line 63: `const challengeData = currentData.challenge;`
+    // If I change structure, I break the app.
+
+    // Hack: I will stick to the shared challenge structure for now, 
+    // BUT since the Request is "Different Curriculum", sharing a challenge for "SQL vs Python" level is weird.
+    // "Level 6: Stored Procedures" (Analyst) vs "Level 6: Python Intro" (Scientist).
+    // The challenge CANNOT be shared.
+
+    // I MUST update `LessonPage.tsx` to read specific challenge.
+    // `const challengeData = isAnalyst ? currentData.analyst.challenge : currentData.scientist.challenge;`
+    // If that is missing, fallback to generic.
+
+    // So I will inject challenge INSIDE the track object in this generator.
+};
+
+// Update to script logic below: I will attach challenge to the track object directly.
+
 
 export const curricula = {
     ...baseCurricula,

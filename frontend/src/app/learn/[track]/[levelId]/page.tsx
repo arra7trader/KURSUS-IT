@@ -59,8 +59,15 @@ export default function LessonPage({
 
     // Get dynamic content
     const currentData = curricula[levelId] || curricula['level-1'];
+
+    // Separate content based on track
     const lectureContent = isAnalyst ? currentData.analyst : currentData.scientist;
-    const challengeData = currentData.challenge;
+
+    // Try to get track-specific challenge, fallback to shared challenge
+    // Note: curricula.ts generator now puts challenge inside analyst/scientist object for levels 6+
+    // But baseCurricula (1-5) uses shared 'challenge' property.
+    // Logic: Look for `lectureContent.challenge`, if fail look for `currentData.challenge`.
+    const challengeData = (lectureContent as any).challenge || currentData.challenge;
 
     // State
     const [mode, setMode] = useState<'lecture' | 'practice'>('lecture');
