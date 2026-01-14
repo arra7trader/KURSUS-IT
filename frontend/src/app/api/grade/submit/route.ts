@@ -1,4 +1,4 @@
-import { ChatGroq } from 'langchain-groq';
+import { ChatGroq } from '@langchain/groq';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { JsonOutputParser } from '@langchain/core/output_parsers';
 import { NextRequest, NextResponse } from 'next/server';
