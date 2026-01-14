@@ -47,97 +47,132 @@ interface ChatMessage {
     timestamp: Date;
 }
 
-// Konten Kuliah untuk Rendy (Data Analyst)
+// Konten Kuliah untuk Rendy (Data Analyst) - Expanded
 const lectureContentAnalyst = {
-    title: 'Dasar-dasar SQL: SELECT Query',
+    title: 'Dasar-dasar SQL: Menguasai SELECT Query',
     sections: [
         {
-            heading: 'Apa itu SQL?',
-            content: 'SQL (Structured Query Language) adalah bahasa standar untuk berkomunikasi dengan database. Hampir semua perusahaan menyimpan data mereka di database, jadi SQL adalah skill wajib untuk Data Analyst.',
+            heading: 'Kurikulum Pembelajaran',
+            content: 'Selamat datang di Level 1! Di sini kamu akan belajar fondasi utama SQL yang akan kamu gunakan di 80% pekerjaanmu sebagai Data Analyst.\n\nFokus kita hari ini:\n1. Mengambil data (SELECT)\n2. Memfilter data (WHERE)\n3. Mengurutkan data (ORDER BY)\n4. Membatasi hasil (LIMIT)\n5. Menggabungkan data (JOIN)\n\nMari kita bedah satu per satu.',
         },
         {
-            heading: 'Perintah SELECT',
-            content: 'SELECT adalah perintah paling dasar dan paling sering digunakan. Fungsinya untuk mengambil/membaca data dari database.',
-            code: `SELECT kolom1, kolom2
-FROM nama_tabel
-WHERE kondisi;`,
+            heading: '1. Mengambil Data (The Art of SELECT)',
+            content: 'SELECT adalah senjata utamamu. Tapi ingat, jangan pernah pakai `SELECT *` di production kecuali kamu mau dimarahin DBA (Database Administrator).\n\nKenapa?\n- Boros bandwidth\n- Bikin query lambat\n- Susah dibaca\n\nSelalu sebutkan kolom yang kamu butuhkan secara spesifik.',
+            code: `-- JANGAN lakukan ini:
+SELECT * FROM orders;
+
+-- LAKUKAN ini:
+SELECT order_id, customer_id, order_date, total_amount
+FROM orders;`,
         },
         {
-            heading: 'Contoh di Dunia Kerja',
-            content: 'Misal bos kamu minta: "Kasih saya daftar customer yang sudah order lebih dari Rp10 juta"',
-            code: `SELECT customer_name, total_order
+            heading: '2. Memfilter Data dengan Presisi (WHERE)',
+            content: 'Data di dunia nyata itu kotor dan banyak. Kamu butuh filter untuk mendapatkan insight yang relevan.\n\nOperator penting:\n- `=` (sama dengan)\n- `<>` atau `!=` (tidak sama dengan)\n- `>` (lebih besar), `<` (lebih kecil)\n- `IN` (cocokkan dengan list)\n- `LIKE` (pencarian pola teks)\n- `IS NULL` (cek data kosong)',
+            code: `-- Contoh: Cari customer dari Jakarta yang belanja > 1jt
+SELECT customer_name, email
 FROM customers
-WHERE total_order > 10000000;`,
+WHERE city = 'Jakarta' 
+  AND total_spend > 1000000;
+
+-- Contoh: Cari email gmail
+SELECT email FROM customers WHERE email LIKE '%@gmail.com';`,
         },
         {
-            heading: 'Menggabungkan Tabel dengan JOIN',
-            content: 'Data di perusahaan biasanya tersebar di beberapa tabel. JOIN digunakan untuk menggabungkan data dari tabel-tabel tersebut.',
-            code: `SELECT c.customer_name, o.order_total
-FROM customers c
-JOIN orders o ON c.customer_id = o.customer_id;`,
+            heading: '3. Mengurutkan Data (ORDER BY)',
+            content: 'Data yang tidak urut itu membingungkan. Gunakan ORDER BY untuk menyusun cerita datamu.\n\n- `ASC` = Ascending (A-Z, 0-9)\n- `DESC` = Descending (Z-A, 9-0)',
+            code: `-- Urutkan dari belanja terbesar ke terkecil
+SELECT customer_name, total_spend
+FROM customers
+ORDER BY total_spend DESC;
+
+-- Urutkan berdasarkan kota, lalu nama
+SELECT city, customer_name
+FROM customers
+ORDER BY city ASC, customer_name ASC;`,
         },
         {
-            heading: 'Agregasi Data',
-            content: 'Untuk membuat laporan, kita sering perlu menghitung total, rata-rata, atau jumlah data. Gunakan fungsi agregasi: SUM, AVG, COUNT, MIN, MAX.',
-            code: `SELECT customer_name, SUM(order_value) AS total_belanja
+            heading: '4. Membatasi Hasil (LIMIT)',
+            content: 'Saat eksplorasi data, jangan tarik 1 juta baris. Cukup intip 5-10 baris teratas dulu untuk paham struktur datanya.',
+            code: `SELECT * FROM big_table LIMIT 10;`,
+        },
+        {
+            heading: '5. Menggabungkan Tabel (JOIN)',
+            content: 'Ini adalah "Super Power" SQL. Data jarang ada di satu tabel saja. Biasanya terpecah di tabel `users`, `orders`, `products`, dll.\n\nJenis JOIN utama:\n- `INNER JOIN`: Hanya data yang ada di KEDUA tabel (Irisan)\n- `LEFT JOIN`: Semua data tabel KIRI + data tabel KANAN yang cocok (jika ada)',
+            code: `-- Gabungkan tabel customers dan orders
+SELECT c.customer_name, o.order_date, o.amount
 FROM customers c
-JOIN orders o ON c.customer_id = o.customer_id
+JOIN orders o ON c.id = o.customer_id;`,
+        },
+        {
+            heading: 'Studi Kasus Bisnis: RFM Analysis',
+            content: 'Sebagai analis, kamu sering diminta membuat segmentasi customer. Salah satu metodenya adalah RFM (Recency, Frequency, Monetary).\n\nUntuk mendapatkan data Monetary (Total Uang), kita butuh agregasi:',
+            code: `SELECT 
+    customer_name, 
+    SUM(amount) AS total_monetary
+FROM orders
 GROUP BY customer_name
-ORDER BY total_belanja DESC;`,
-        },
-        {
-            heading: 'Tips dari Rendy',
-            content: '"Data cuma berguna kalau bisa bikin duit atau hemat waktu."\n\n• Selalu pikirkan: Apa tujuan bisnis dari query ini?\n• Query yang lambat = bos marah = karir terhambat\n• Pakai alias (AS) supaya hasil query mudah dibaca\n• Test query dengan LIMIT dulu sebelum run full data',
+ORDER BY total_monetary DESC
+LIMIT 5;`,
         },
     ],
 };
 
-// Konten Kuliah untuk Abdul (Data Scientist)
+// Konten Kuliah untuk Abdul (Data Scientist) - Expanded
 const lectureContentScientist = {
-    title: 'SQL untuk Data Science',
+    title: 'SQL untuk Data Science: Deep Dive',
     sections: [
         {
-            heading: 'Kenapa SQL Penting untuk Data Scientist?',
-            content: 'Sebelum kamu bisa training model ML, kamu butuh data yang bersih. Dan 90% data perusahaan ada di database relasional. SQL adalah jembatanmu ke data.',
+            heading: 'Kurikulum: Data Retrieval & Manipulation',
+            content: 'Sebagai Data Scientist, SQL bukan sekadar alat ambil data. Ini adalah tahap awal Data Preprocessing.\n\nModul ini mencakup:\n1. Anatomi & Eksekusi Query\n2. Filtering & Indexing Strategy\n3. Sampling Teknik untuk ML\n4. Aggregation & Feature Engineering\n\nKita akan bahas dari sudut pandang efisiensi komputasi.',
         },
         {
-            heading: 'Query Fundamental',
-            content: 'Pahami struktur dasar query SQL. Ini adalah fondasi untuk query yang lebih kompleks.',
-            code: `SELECT kolom1, kolom2
-FROM tabel_a
-JOIN tabel_b ON tabel_a.id = tabel_b.id
-WHERE kondisi
-GROUP BY kolom1;`,
+            heading: '1. Anatomi & Eksekusi Query',
+            content: 'SQL adalah bahasa deklaratif. Kamu bilang "APA" yang kamu mau, database engine yang mikir "BAGAIMANA" caranya.\n\nUrutan Eksekusi Logis (PENTING!):\n1. `FROM` & `JOIN` (Ambil tabel)\n2. `WHERE` (Filter baris awal)\n3. `GROUP BY` (Kelompokkan)\n4. `HAVING` (Filter hasil grup)\n5. `SELECT` (Pilih kolom)\n6. `ORDER BY` (Urutkan)\n7. `LIMIT` (Potong hasil)',
+            code: `-- Engine tidak membaca dari atas ke bawah!
+SELECT category, AVG(price) -- 5. SELECT
+FROM products               -- 1. FROM
+WHERE stock > 0             -- 2. WHERE
+GROUP BY category           -- 3. GROUP BY
+HAVING AVG(price) > 50000   -- 4. HAVING
+ORDER BY AVG(price) DESC;   -- 6. ORDER BY`,
         },
         {
-            heading: 'Kompleksitas Query (Big O)',
-            content: 'Sebagai scientist, kamu harus paham kompleksitas:\n\n• SELECT tanpa index: O(n) - linear scan\n• SELECT dengan index: O(log n) - binary search\n• JOIN tanpa index: O(n×m) - hindari!\n• JOIN dengan index: O(n log m) - lebih baik',
+            heading: '2. Filtering & Indexing (Optimasi O(log n))',
+            content: 'Saat kamu memfilter data dengan `WHERE`, database engine punya dua pilihan:\n1. **Full Table Scan (O(n))**: Baca baris satu-satu. Lambat.\n2. **Index Scan (O(log n))**: Loncat langsung ke data pakai struktur B-Tree.\n\nPastikan kolom yang sering kamu filter (seperti `date`, `user_id`, `status`) memiliki index.',
         },
         {
-            heading: 'Feature Engineering dengan SQL',
-            content: 'Untuk prediksi customer churn, kamu butuh fitur-fitur seperti: total order, rata-rata nilai order, frekuensi order. Semua bisa dihitung dengan SQL.',
-            code: `SELECT 
-    customer_id,
-    COUNT(*) AS order_count,
-    AVG(order_value) AS avg_order,
-    SUM(order_value) AS total_spent,
-    MAX(order_date) AS last_order
-FROM orders
-GROUP BY customer_id;`,
+            heading: '3. Data Sampling untuk Machine Learning',
+            content: 'Training model dengan 1 TERA byte data mungkin overkill dan mahal. Kadang kamu cukup butuh sampel acak yang representatif.\n\nSalah satu teknik sampling sederhana:',
+            code: `-- Ambil 10% sampel acak (PostgreSQL/SQLite)
+SELECT * FROM large_dataset
+ORDER BY RANDOM()
+LIMIT (SELECT count(*) * 0.1 FROM large_dataset);`,
         },
         {
-            heading: 'Window Functions',
-            content: 'Untuk analisis yang lebih advanced seperti ranking, running total, atau perbandingan dengan baris sebelumnya.',
-            code: `SELECT 
-    customer_name,
-    order_value,
-    RANK() OVER (ORDER BY order_value DESC) AS ranking,
-    SUM(order_value) OVER (ORDER BY order_date) AS running_total
-FROM orders;`,
+            heading: '4. Feature Engineering: Window Functions',
+            content: 'Window functions adalah game-changer untuk time-series data atau sequential data. Dia memungkinkan kalkulasi antar-baris tanpa `GROUP BY` yang merusak detail baris.\n\nContoh: Menghitung Moving Average.',
+            code: `-- Moving Average 3 hari terakhir
+SELECT 
+    date,
+    sales,
+    AVG(sales) OVER (
+        ORDER BY date 
+        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+    ) as moving_avg_3d
+FROM daily_sales;`,
         },
         {
-            heading: 'Tips dari Abdul',
-            content: '"Pahami matematika di balik algoritmanya."\n\n• Selalu cek EXPLAIN PLAN untuk optimasi query\n• Gunakan index pada kolom yang sering di-filter\n• Tulis query yang reproducible dan terdokumentasi\n• Validasi hasil query dengan statistik deskriptif',
+            heading: '5. Handling NULL Values (Data Cleaning)',
+            content: 'NULL di SQL itu unik. `NULL != NULL`. NULL artinya "tidak diketahui".\n\nUntuk cleaning data ML, kamu sering perlu imputasi (isi data kosong).',
+            code: `-- Imputasi nilai NULL dengan rata-rata (COALESCE)
+SELECT 
+    id, 
+    COALESCE(age, (SELECT AVG(age) FROM users)) as age_clean
+FROM users;`,
+        },
+        {
+            heading: 'Challenge Time: Kompleksitas',
+            content: 'Di challenge nanti, kamu akan diminta menggabungkan data. Pikirkan: Jika kamu melakukan JOIN pada kolom yang tidak di-index, berapa cost komputasinya? O(N*M)? Bisakah kita filter dulu sebelum JOIN untuk mengurangi N dan M?',
         },
     ],
 };
