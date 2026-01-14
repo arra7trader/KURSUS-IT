@@ -77,6 +77,9 @@ export default function LessonPage({
     const [isGrading, setIsGrading] = useState(false);
     const [gradeResult, setGradeResult] = useState<GradeResult | null>(null);
 
+    const [generatedSections, setGeneratedSections] = useState<any[] | null>(null);
+    const [isLoadingAI, setIsLoadingAI] = useState(false);
+
     // Initial code update when level changes
     useEffect(() => {
         setCode(challengeData.starterCode);
@@ -84,7 +87,33 @@ export default function LessonPage({
         setOutput('');
         setGradeResult(null);
         setChatMessages([]);
-    }, [levelId, challengeData]);
+        setGeneratedSections(null); // Reset
+
+        // Fetch AI Lesson if flagged
+        if ((lectureContent as any).isGenerated) {
+            setIsLoadingAI(true);
+            const topic = (lectureContent as any).topic;
+
+            fetch('/api/lesson/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    topic,
+                    track: isAnalyst ? 'Data Analyst' : 'Data Scientist',
+                    level: levelId
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.sections) {
+                        setGeneratedSections(data.sections);
+                    }
+                })
+                .catch(err => console.error(err))
+                .finally(() => setIsLoadingAI(false));
+        }
+
+    }, [levelId, challengeData, lectureContent, isAnalyst]);
 
     // Chat state
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
@@ -296,7 +325,15 @@ export default function LessonPage({
                     </motion.div>
 
                     <div className="space-y-6">
-                        {lectureContent.sections.map((section: any, index: number) => (
+                        {isLoadingAI && (
+                            <div className="flex flex-col items-center justify-center p-12 bg-white rounded-xl border border-gray-200">
+                                <Loader2 className="w-10 h-10 text-blue-600 animate-spin mb-4" />
+                                <h3 className="text-lg font-semibold text-gray-900">Mentor AI sedang menyusun materi...</h3>
+                                <p className="text-gray-500">Menulis kurikulum tingkat universitas khusus untukmu.</p>
+                            </div>
+                        )}
+
+                        {(generatedSections || lectureContent.sections).map((section: any, index: number) => (
                             <motion.div
                                 key={index}
                                 initial={{ opacity: 0, y: 20 }}
