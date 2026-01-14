@@ -39,15 +39,14 @@ export async function GET() {
 
             url_prefix: process.env.TURSO_DATABASE_URL?.split(':')[0],
             token_length: process.env.TURSO_AUTH_TOKEN?.length
-        }
         });
-} catch (error: any) {
-    console.error("❌ DB Connection Failed:", error);
-    return NextResponse.json({
-        status: "error",
-        message: error.message,
-        stack: error.stack,
-        cause: error.cause
-    }, { status: 500 });
-}
+    } catch (error: any) {
+        console.error("❌ DB Connection Failed:", error);
+        return NextResponse.json({
+            status: "error",
+            message: error.message,
+            stack: error.stack,
+            cause: error.cause
+        }, { status: 500 });
+    }
 }
