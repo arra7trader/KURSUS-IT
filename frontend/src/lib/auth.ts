@@ -5,13 +5,12 @@ import { users } from "@/db/schema"
 import { eq } from "drizzle-orm"
 import Credentials from "next-auth/providers/credentials"
 import { v4 as uuidv4 } from "uuid"
+import { authConfig } from "../auth.config"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+    ...authConfig,
     adapter: DrizzleAdapter(db),
     session: { strategy: "jwt" },
-    pages: {
-        signIn: "/login",
-    },
     providers: [
         Credentials({
             name: "Guest Login",
@@ -26,15 +25,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 const name = credentials.name as string;
 
                 // Check if user exists
-                const existingUsers = await db.select().from(users).where(eq(users.email, email)).limit(1);
-
-                if (existingUsers.length > 0) {
-                    return existingUsers[0];
-                }
-
-                // If not, create new user (Auto-registration for Guest mode)
-                const newId = uuidv4();
                 try {
+                    const existingUsers = await db.select().from(users).where(eq(users.email, email)).limit(1);
+
+                    if (existingUsers.length > 0) {
+                        return existingUsers[0];
+                    }
+
+                    // If not, create new user (Auto-registration for Guest mode)
+                    const newId = uuidv4();
                     await db.insert(users).values({
                         id: newId,
                         email,
@@ -47,24 +46,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                         name,
                     };
                 } catch (error) {
-                    console.error("Error creating user:", error);
+                    console.error("Error verifying/creating user:", error);
                     return null;
                 }
             }
         })
     ],
-    callbacks: {
-        async session({ session, token }) {
-            if (token.sub && session.user) {
-                session.user.id = token.sub;
-            }
-            return session;
-        },
-        async jwt({ token, user }) {
-            if (user) {
-                token.sub = user.id;
-            }
-            return token;
-        }
-    }
 })
