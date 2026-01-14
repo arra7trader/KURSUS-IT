@@ -1,0 +1,273 @@
+{
+    "track": "Data Scientist",
+    "track_code": "SCIENTIST",
+    "mentor": "Abdul",
+    "level": 1,
+    "title": "Data Novice",
+    "subtitle": "Mathematical Foundations for Machine Learning",
+    "description": "Build the essential mathematical and programming foundation that separates true Data Scientists from tool users. Master the concepts that underlie every ML algorithm.",
+    "estimated_hours": 16,
+    "min_passing_score": 70,
+    "prerequisites": [
+        "Basic high school algebra",
+        "Familiarity with any programming language (helpful but not required)"
+    ],
+    "learning_outcomes": [
+        "Understand and perform matrix operations essential for ML",
+        "Apply statistical concepts to real-world data analysis",
+        "Write clean, efficient Python code following best practices",
+        "Interpret mathematical notation in ML papers and documentation",
+        "Build intuition for why algorithms work, not just how"
+    ],
+    "modules": [
+        {
+            "id": "DS-L1-M01",
+            "sequence": 1,
+            "topic": "Linear Algebra Essentials: Vectors and Matrices",
+            "type": "lesson",
+            "duration_minutes": 75,
+            "description": "Master the building blocks of machine learning mathematics. Every neural network, every PCA, every recommendation system is built on these foundations.",
+            "key_concepts": [
+                "Vectors: representation, magnitude, direction",
+                "Vector operations: addition, scalar multiplication, dot product",
+                "Matrices: notation, dimensions, transpose",
+                "Matrix multiplication: why order matters",
+                "Identity matrix and inverse matrix",
+                "Geometric interpretation of linear transformations"
+            ],
+            "mathematical_notation": [
+                "v ∈ ℝⁿ (vector in n-dimensional real space)",
+                "A ∈ ℝᵐˣⁿ (matrix with m rows, n columns)",
+                "||v|| = √(Σvᵢ²) (Euclidean norm)",
+                "A · B ≠ B · A (matrix multiplication is not commutative)"
+            ],
+            "case_study": {
+                "title": "Netflix-Style Recommendation System Mathematics",
+                "scenario": "You're building the mathematical foundation for a movie recommendation engine. Given a user-movie rating matrix R (1000 users × 500 movies), perform the following: (1) Represent user preferences as vectors, (2) Calculate similarity between users using cosine similarity, (3) Understand why matrix factorization (R ≈ U × V) reduces dimensions from 500 features to k latent factors, (4) Manually compute predictions for a small subset to understand the algorithm before implementing it.",
+                "dataset": "movie_ratings_sample.csv",
+                "deliverables": [
+                    "Hand-calculated cosine similarity between 3 user pairs",
+                    "Explanation of why dot product measures similarity",
+                    "Dimension analysis: what changes when k = 10 vs k = 50?"
+                ]
+            }
+        },
+        {
+            "id": "DS-L1-M02",
+            "sequence": 2,
+            "topic": "Descriptive Statistics: Beyond the Basics",
+            "type": "lesson",
+            "duration_minutes": 60,
+            "description": "Go beyond mean and median. Understand the statistical measures that reveal data patterns, detect anomalies, and inform feature engineering decisions.",
+            "key_concepts": [
+                "Measures of central tendency: mean, median, mode",
+                "Measures of dispersion: variance, standard deviation, IQR",
+                "Skewness and kurtosis: understanding distribution shape",
+                "Percentiles and quantiles for robust analysis",
+                "Correlation vs Causation: the fundamental trap",
+                "Covariance and correlation coefficient interpretation"
+            ],
+            "mathematical_notation": [
+                "μ = (1/n)Σxᵢ (population mean)",
+                "σ² = (1/n)Σ(xᵢ - μ)² (population variance)",
+                "r = Σ(xᵢ - x̄)(yᵢ - ȳ) / √[Σ(xᵢ - x̄)²Σ(yᵢ - ȳ)²] (Pearson correlation)"
+            ],
+            "case_study": {
+                "title": "A/B Test Analysis: Did the New Feature Actually Work?",
+                "scenario": "An e-commerce company ran an A/B test on their checkout flow. Group A (control): 50,000 users, Group B (new design): 50,000 users. You have conversion rates, average order values, and session durations for both groups. The PM claims the new design 'increased conversions by 3%!' Your task: Apply statistical rigor to determine if this difference is (1) real or just random noise, (2) practically significant for the business, (3) hiding any concerning patterns (e.g., higher conversions but lower order values).",
+                "dataset": "ab_test_checkout.csv",
+                "deliverables": [
+                    "Statistical summary of both groups (mean, std, median, IQR)",
+                    "Effect size calculation and interpretation",
+                    "Visual distribution comparison (histograms)",
+                    "Written recommendation: ship or don't ship?"
+                ]
+            }
+        },
+        {
+            "id": "DS-L1-M03",
+            "sequence": 3,
+            "topic": "Probability Theory for Machine Learning",
+            "type": "lesson",
+            "duration_minutes": 70,
+            "description": "Probability is the language of uncertainty, and ML is all about dealing with uncertainty. Master the concepts that power Bayesian methods, classification algorithms, and decision-making under uncertainty.",
+            "key_concepts": [
+                "Probability axioms and rules",
+                "Conditional probability P(A|B)",
+                "Bayes' Theorem and its ML applications",
+                "Common distributions: Normal, Binomial, Poisson",
+                "Expected value and variance of random variables",
+                "Law of Large Numbers and Central Limit Theorem"
+            ],
+            "mathematical_notation": [
+                "P(A|B) = P(B|A) · P(A) / P(B) (Bayes' Theorem)",
+                "E[X] = Σxᵢ · P(xᵢ) (expected value)",
+                "f(x) = (1/σ√2π) · e^(-(x-μ)²/2σ²) (normal distribution PDF)"
+            ],
+            "case_study": {
+                "title": "Medical Diagnosis Classifier: The Base Rate Fallacy",
+                "scenario": "A medical AI startup claims their cancer screening test has 99% accuracy. A patient tests positive. What is the probability they actually have cancer? Given: (1) Test sensitivity (true positive rate): 99%, (2) Test specificity (true negative rate): 95%, (3) Disease prevalence in population: 1%. Use Bayes' Theorem to calculate the true probability. Then explain why 'accuracy' is a misleading metric and what metrics should be used instead.",
+                "dataset": null,
+                "deliverables": [
+                    "Step-by-step Bayes calculation",
+                    "Explanation of why P(cancer|positive) << 99%",
+                    "Confusion matrix for this scenario",
+                    "Recommendation for better evaluation metrics"
+                ]
+            }
+        },
+        {
+            "id": "DS-L1-M04",
+            "sequence": 4,
+            "topic": "Python Fundamentals: Clean Code for Data Science",
+            "type": "lesson",
+            "duration_minutes": 90,
+            "description": "Write Python like a professional, not like a tutorial. Focus on code quality, efficiency, and practices that matter in production ML systems.",
+            "key_concepts": [
+                "Data structures: lists, tuples, dictionaries, sets",
+                "List comprehensions vs loops: when and why",
+                "Functions: parameters, return values, docstrings",
+                "Error handling with try/except",
+                "Type hints for better code documentation",
+                "PEP 8 style guide essentials",
+                "Big O notation: why algorithm efficiency matters"
+            ],
+            "code_examples": [
+                {
+                    "bad": "result = []\nfor i in range(len(data)):\n    if data[i] > 0:\n        result.append(data[i] * 2)",
+                    "good": "result = [x * 2 for x in data if x > 0]",
+                    "explanation": "List comprehension is more Pythonic and ~20% faster"
+                },
+                {
+                    "bad": "def calc(x, y): return x+y",
+                    "good": "def calculate_sum(x: float, y: float) -> float:\n    \"\"\"Add two numbers.\"\"\"\n    return x + y",
+                    "explanation": "Type hints and docstrings make code self-documenting"
+                }
+            ],
+            "case_study": {
+                "title": "Data Pipeline Optimization Challenge",
+                "scenario": "You inherit a data processing script from a previous intern. It works but takes 45 minutes to process 1 million rows. The code is filled with nested loops, redundant calculations, and poor practices. Your task: Refactor the code to (1) reduce runtime by at least 10x, (2) add proper error handling, (3) make it readable and maintainable. You will be evaluated on Big O improvements, code style, and functionality.",
+                "dataset": "messy_pipeline_input.csv",
+                "deliverables": [
+                    "Refactored Python script",
+                    "Performance comparison (before/after)",
+                    "Big O analysis of key operations",
+                    "Documentation of changes made"
+                ]
+            }
+        },
+        {
+            "id": "DS-L1-M05",
+            "sequence": 5,
+            "topic": "NumPy: The Foundation of Scientific Python",
+            "type": "lesson",
+            "duration_minutes": 60,
+            "description": "NumPy is the backbone of all scientific computing in Python. Master array operations that are 100x faster than pure Python loops.",
+            "key_concepts": [
+                "ndarray creation and properties",
+                "Vectorized operations vs loops",
+                "Broadcasting rules and applications",
+                "Indexing, slicing, boolean indexing",
+                "Aggregation functions: sum, mean, std along axes",
+                "Linear algebra with np.linalg"
+            ],
+            "performance_note": "For a 1M element array, NumPy's sum() is ~100x faster than Python's built-in sum(). This is due to: (1) C implementation, (2) contiguous memory layout, (3) vectorized CPU instructions (SIMD).",
+            "case_study": {
+                "title": "Image Processing from Scratch",
+                "scenario": "Build basic image processing operations using only NumPy (no OpenCV or PIL for the core logic). Given a grayscale image as a 2D NumPy array (512×512 pixels), implement: (1) Brightness adjustment (add/subtract from all pixels), (2) Contrast adjustment (multiply all pixels), (3) Image rotation by 90° (matrix transpose + flip), (4) Edge detection using Sobel filter (convolution). Each operation must be vectorized - no Python loops.",
+                "dataset": "sample_image.npy",
+                "deliverables": [
+                    "NumPy functions for each operation",
+                    "Performance benchmark vs loop-based implementation",
+                    "Visualization of processed images"
+                ]
+            }
+        },
+        {
+            "id": "DS-L1-M06",
+            "sequence": 6,
+            "topic": "Introduction to Calculus for Machine Learning",
+            "type": "lesson",
+            "duration_minutes": 60,
+            "description": "Understand derivatives and gradients - the core mechanism behind how neural networks learn. No calculus background required; we build from first principles.",
+            "key_concepts": [
+                "Derivatives: rate of change interpretation",
+                "Common derivatives: power rule, chain rule",
+                "Partial derivatives for multivariable functions",
+                "Gradient: the direction of steepest ascent",
+                "Gradient descent intuition",
+                "Learning rate: why it matters"
+            ],
+            "mathematical_notation": [
+                "f'(x) = lim(h→0) [f(x+h) - f(x)] / h",
+                "∂f/∂x (partial derivative)",
+                "∇f = [∂f/∂x₁, ∂f/∂x₂, ..., ∂f/∂xₙ] (gradient vector)",
+                "θ := θ - α∇J(θ) (gradient descent update rule)"
+            ],
+            "case_study": {
+                "title": "Manual Gradient Descent for Linear Regression",
+                "scenario": "Implement linear regression from scratch using gradient descent. Given housing data (size, price), find the optimal line y = wx + b by minimizing Mean Squared Error. (1) Derive the gradient of MSE with respect to w and b, (2) Implement gradient descent in Python, (3) Visualize the loss decreasing over iterations, (4) Compare your result with sklearn's LinearRegression to verify correctness.",
+                "dataset": "housing_simple.csv",
+                "deliverables": [
+                    "Mathematical derivation of gradients (handwritten or LaTeX)",
+                    "Python implementation of gradient descent",
+                    "Loss curve visualization",
+                    "Comparison with sklearn solution"
+                ]
+            }
+        },
+        {
+            "id": "DS-L1-C01",
+            "sequence": 7,
+            "topic": "Level 1 Final Challenge: End-to-End Analysis",
+            "type": "challenge",
+            "duration_minutes": 120,
+            "description": "Apply all Level 1 mathematical and programming skills in a comprehensive data science scenario. AI will grade correctness, efficiency (Big O), style, and statistical rigor.",
+            "grading_criteria": {
+                "correctness": 40,
+                "efficiency": 25,
+                "style": 15,
+                "business_insight": 20
+            },
+            "case_study": {
+                "title": "Predicting Customer Churn: Mathematical Foundation",
+                "scenario": "A telecom company wants to predict customer churn. Before building any ML model, they need you to establish the mathematical foundation. Given customer data (tenure, monthly charges, total charges, contract type, services used), perform: (1) Compute correlation matrix to identify predictive features, (2) Apply Bayes' Theorem to calculate P(churn | high_monthly_charge AND month-to-month_contract), (3) Implement a simple scoring model using matrix operations (feature weights × feature values), (4) Calculate precision, recall, and F1-score for your scoring model, (5) Explain why Big O complexity matters when scaling to 10M customers.",
+                "dataset": "telecom_churn.csv",
+                "deliverables": [
+                    "Correlation matrix with interpretation",
+                    "Bayes probability calculation with steps shown",
+                    "Vectorized scoring function using NumPy",
+                    "Confusion matrix and metrics",
+                    "Big O analysis writeup"
+                ],
+                "minimum_passing_score": 70,
+                "time_limit_minutes": 120
+            }
+        }
+    ],
+    "tools": [
+        "Python 3.10+",
+        "NumPy",
+        "Jupyter Notebook / Google Colab",
+        "Matplotlib (for visualizations)"
+    ],
+    "certification": {
+        "badge_name": "Data Novice - Scientist Track",
+        "badge_icon": "math_badge.png",
+        "credential_text": "Completed Data Academy Level 1: Data Novice (Scientist Track)"
+    },
+    "recommended_reading": [
+        {
+            "title": "Mathematics for Machine Learning",
+            "authors": "Deisenroth, Faisal, Ong",
+            "link": "https://mml-book.github.io/",
+            "note": "Free PDF, chapters 2-5 for Level 1"
+        },
+        {
+            "title": "Python Data Science Handbook",
+            "authors": "Jake VanderPlas",
+            "link": "https://jakevdp.github.io/PythonDataScienceHandbook/",
+            "note": "Free online, NumPy chapter"
+        }
+    ]
+}

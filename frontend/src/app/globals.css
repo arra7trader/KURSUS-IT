@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom base styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-gray-950 text-white antialiased;
+  }
+
+  ::selection {
+    @apply bg-analyst-500/30 text-white;
+  }
+}
+
+/* Custom component styles */
+@layer components {
+  .glass-card {
+    @apply backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl;
+  }
+
+  .glass-card-analyst {
+    @apply backdrop-blur-xl bg-analyst-500/10 border border-analyst-400/20 rounded-2xl;
+  }
+
+  .glass-card-scientist {
+    @apply backdrop-blur-xl bg-scientist-500/10 border border-scientist-400/20 rounded-2xl;
+  }
+
+  .btn-primary {
+    @apply px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl;
+  }
+
+  .btn-analyst {
+    @apply btn-primary bg-gradient-to-r from-analyst-600 to-analyst-500 hover:from-analyst-500 hover:to-analyst-400 text-white shadow-analyst-500/25 shadow-xl;
+  }
+
+  .btn-scientist {
+    @apply btn-primary bg-gradient-to-r from-scientist-600 to-scientist-500 hover:from-scientist-500 hover:to-scientist-400 text-white shadow-scientist-500/25 shadow-xl;
+  }
+
+  .text-gradient-analyst {
+    @apply bg-gradient-to-r from-analyst-400 via-analyst-300 to-cyan-400 bg-clip-text text-transparent;
+  }
+
+  .text-gradient-scientist {
+    @apply bg-gradient-to-r from-scientist-400 via-scientist-300 to-pink-400 bg-clip-text text-transparent;
+  }
+}
+
+/* Custom utility styles */
+@layer utilities {
+  .animate-float-slow {
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float 6s ease-in-out infinite;
+    animation-delay: 2s;
+  }
+
+  .bg-mesh-analyst {
+    background-image: 
+      radial-gradient(at 40% 20%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, rgba(34, 211, 238, 0.1) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, rgba(37, 99, 235, 0.1) 0px, transparent 50%);
+  }
+
+  .bg-mesh-scientist {
+    background-image: 
+      radial-gradient(at 60% 20%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
+      radial-gradient(at 20% 0%, rgba(236, 72, 153, 0.1) 0px, transparent 50%),
+      radial-gradient(at 100% 50%, rgba(126, 34, 206, 0.1) 0px, transparent 50%);
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-700 rounded-full hover:bg-gray-600;
+}
+
+/* Grid pattern background */
+.bg-grid-pattern {
+  background-size: 60px 60px;
+  background-image: 
+    linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+}

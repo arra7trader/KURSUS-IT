@@ -1,0 +1,296 @@
+// Data Academy - Prisma Schema
+// AI-driven LMS for Data Analysts and Data Scientists
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum CareerPath {
+  ANALYST    // Data Analyst path - taught by AI Persona Rendy
+  SCIENTIST  // Data Scientist path - taught by AI Persona Abdul
+}
+
+enum ContentType {
+  VIDEO
+  TEXT
+  INTERACTIVE
+}
+
+enum ChallengeType {
+  PYTHON
+  SQL
+  MIXED
+}
+
+enum SubmissionStatus {
+  PENDING
+  GRADING
+  COMPLETED
+  FAILED
+}
+
+enum ProgressStatus {
+  LOCKED
+  UNLOCKED
+  IN_PROGRESS
+  COMPLETED
+}
+
+// ============================================
+// USER & AUTHENTICATION
+// ============================================
+
+model User {
+  id             String      @id @default(cuid())
+  email          String      @unique
+  name           String?
+  passwordHash   String?
+  avatarUrl      String?
+  currentPath    CareerPath  @default(ANALYST)
+  
+  // Metadata
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  lastLoginAt    DateTime?
+  
+  // Relations
+  progress       UserProgress[]
+  submissions    Submission[]
+  achievements   UserAchievement[]
+  
+  @@index([email])
+  @@index([currentPath])
+}
+
+// ============================================
+// COURSE STRUCTURE
+// ============================================
+
+model Track {
+  id             String      @id @default(cuid())
+  name           String      // "Data Analyst" or "Data Scientist"
+  slug           String      @unique
+  description    String?
+  path           CareerPath  @unique
+  aiPersonaName  String      // "Rendy" or "Abdul"
+  aiPersonaAvatar String?
+  
+  // Metadata
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  isActive       Boolean     @default(true)
+  
+  // Relations
+  levels         Level[]
+  
+  @@index([path])
+}
+
+model Level {
+  id                  String    @id @default(cuid())
+  trackId             String
+  name                String    // e.g., "Level 1: Python Fundamentals"
+  slug                String
+  description         String?
+  
+  // Progression Control
+  sequenceOrder       Int       // Order within the track (1, 2, 3...)
+  minPassingScore     Int       @default(70) // Minimum score to unlock next level
+  isLockedByDefault   Boolean   @default(true)
+  
+  // Metadata
+  estimatedMinutes    Int?      // Estimated completion time
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  isActive            Boolean   @default(true)
+  
+  // Relations
+  track               Track     @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  modules             Module[]
+  challenges          Challenge[]
+  userProgress        UserProgress[]
+  
+  @@unique([trackId, sequenceOrder])
+  @@unique([trackId, slug])
+  @@index([trackId])
+  @@index([sequenceOrder])
+}
+
+model Module {
+  id             String       @id @default(cuid())
+  levelId        String
+  title          String
+  slug           String
+  content        String?      @db.Text // Rich text content or video embed
+  contentType    ContentType  @default(TEXT)
+  videoUrl       String?
+  
+  // Ordering
+  sequenceOrder  Int
+  
+  // Metadata
+  durationMinutes Int?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  isActive       Boolean      @default(true)
+  
+  // Relations
+  level          Level        @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  
+  @@unique([levelId, sequenceOrder])
+  @@unique([levelId, slug])
+  @@index([levelId])
+}
+
+model Challenge {
+  id                String         @id @default(cuid())
+  levelId           String
+  title             String
+  slug              String
+  description       String         @db.Text
+  
+  // Challenge Configuration
+  challengeType     ChallengeType  @default(PYTHON)
+  starterCode       String?        @db.Text // Initial code template
+  solutionCode      String?        @db.Text // Reference solution (hidden)
+  testCases         Json?          // JSON array of test cases
+  hints             Json?          // JSON array of hints
+  
+  // Scoring
+  maxScore          Int            @default(100)
+  sequenceOrder     Int
+  
+  // Grading Criteria (for AI grading)
+  gradingCriteria   Json?          // { correctness: 40, efficiency: 30, insight: 30 }
+  
+  // Metadata
+  difficulty        Int            @default(1) // 1-5 scale
+  estimatedMinutes  Int?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  isActive          Boolean        @default(true)
+  
+  // Relations
+  level             Level          @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  submissions       Submission[]
+  
+  @@unique([levelId, sequenceOrder])
+  @@unique([levelId, slug])
+  @@index([levelId])
+  @@index([challengeType])
+}
+
+// ============================================
+// STUDENT PROGRESS & SUBMISSIONS
+// ============================================
+
+model UserProgress {
+  id               String          @id @default(cuid())
+  userId           String
+  levelId          String
+  
+  // Progress State
+  status           ProgressStatus  @default(LOCKED)
+  currentScore     Int             @default(0) // Aggregate score for this level
+  completedModules Int             @default(0)
+  completedChallenges Int          @default(0)
+  
+  // Timestamps
+  unlockedAt       DateTime?
+  startedAt        DateTime?
+  completedAt      DateTime?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  
+  // Relations
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  level            Level           @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, levelId])
+  @@index([userId])
+  @@index([levelId])
+  @@index([status])
+}
+
+model Submission {
+  id              String           @id @default(cuid())
+  userId          String
+  challengeId     String
+  
+  // Submitted Code
+  code            String           @db.Text
+  language        ChallengeType    @default(PYTHON)
+  
+  // AI Grading Results
+  status          SubmissionStatus @default(PENDING)
+  score           Int?             // 0-100 score
+  
+  // Detailed Scores (JSON for flexibility)
+  scoreBreakdown  Json?            // { correctness: 35, efficiency: 28, insight: 25 }
+  
+  // AI Feedback
+  aiFeedback      String?          @db.Text // Detailed feedback from AI
+  aiSuggestions   Json?            // Array of improvement suggestions
+  
+  // Execution Results
+  executionOutput String?          @db.Text
+  executionError  String?          @db.Text
+  executionTimeMs Int?
+  
+  // Metadata
+  attemptNumber   Int              @default(1)
+  submittedAt     DateTime         @default(now())
+  gradedAt        DateTime?
+  
+  // Relations
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challenge       Challenge        @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([challengeId])
+  @@index([status])
+  @@index([submittedAt])
+}
+
+// ============================================
+// GAMIFICATION (OPTIONAL ENHANCEMENT)
+// ============================================
+
+model Achievement {
+  id             String            @id @default(cuid())
+  name           String            @unique
+  description    String?
+  iconUrl        String?
+  points         Int               @default(0)
+  
+  // Unlock Criteria (JSON for flexibility)
+  criteria       Json?             // { type: "complete_level", levelId: "..." }
+  
+  createdAt      DateTime          @default(now())
+  
+  // Relations
+  userAchievements UserAchievement[]
+}
+
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  achievementId String
+  earnedAt      DateTime    @default(now())
+  
+  // Relations
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, achievementId])
+  @@index([userId])
+}

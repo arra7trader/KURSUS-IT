@@ -1,0 +1,187 @@
+{
+    "track": "Data Analyst",
+    "track_code": "ANALYST",
+    "mentor": "Rendy",
+    "level": 1,
+    "title": "Data Novice",
+    "subtitle": "Foundation of Business Data Analysis",
+    "description": "Master the fundamental tools and concepts that every Data Analyst needs. Learn to transform raw data into actionable business insights using spreadsheets.",
+    "estimated_hours": 12,
+    "min_passing_score": 70,
+    "prerequisites": [],
+    "learning_outcomes": [
+        "Understand different data types and their business applications",
+        "Master advanced Excel/Sheets formulas for data manipulation",
+        "Apply conditional logic to solve business problems",
+        "Create dynamic lookups across multiple data sources",
+        "Build basic data validation and quality checks"
+    ],
+    "modules": [
+        {
+            "id": "DA-L1-M01",
+            "sequence": 1,
+            "topic": "Understanding Data Types in Business Context",
+            "type": "lesson",
+            "duration_minutes": 45,
+            "description": "Learn to identify and properly handle different data types: text, numbers, dates, booleans, and categorical data. Understand why data types matter for analysis accuracy and business reporting.",
+            "key_concepts": [
+                "Numeric vs Text data and conversion pitfalls",
+                "Date/Time formats across different regions (ISO 8601)",
+                "Boolean logic in business decision-making",
+                "Categorical vs Continuous variables",
+                "Data type coercion and its dangers"
+            ],
+            "case_study": {
+                "title": "The $125 Million Spreadsheet Error",
+                "scenario": "A multinational retail company discovered that their quarterly revenue report was off by $125 million. The root cause? A junior analyst imported European sales data where commas are used as decimal separators (€1.234,56) into a US-formatted spreadsheet. Your task: Analyze the corrupted dataset, identify all data type mismatches, and create a standardized data cleaning protocol.",
+                "dataset": "retail_sales_mixed_format.csv",
+                "deliverables": [
+                    "List of all data type inconsistencies found",
+                    "Cleaned dataset with proper formatting",
+                    "Written protocol for future data imports"
+                ]
+            }
+        },
+        {
+            "id": "DA-L1-M02",
+            "sequence": 2,
+            "topic": "Advanced Conditional Logic: IF, IFS, AND, OR, NOT",
+            "type": "lesson",
+            "duration_minutes": 60,
+            "description": "Master conditional functions to automate business decision logic. Learn to nest conditions efficiently and avoid common logical errors that cost companies millions.",
+            "key_concepts": [
+                "Single IF statements with proper TRUE/FALSE handling",
+                "Nested IF vs IFS for multiple conditions",
+                "Combining AND, OR, NOT for complex logic",
+                "SWITCH function for cleaner multi-condition handling",
+                "Error handling with IFERROR and IFNA"
+            ],
+            "case_study": {
+                "title": "E-Commerce Discount Engine",
+                "scenario": "An online fashion retailer wants to automate their discount logic. They have 5 customer tiers (Bronze, Silver, Gold, Platinum, VIP), 3 product categories (Regular, Sale, Clearance), and seasonal multipliers. Build a formula engine that calculates the final price considering: (1) Base tier discount (5-25%), (2) Category restrictions (Clearance items excluded from tier discounts), (3) Seasonal sale stackability rules, (4) Minimum purchase thresholds for discount activation.",
+                "dataset": "ecommerce_pricing_rules.xlsx",
+                "deliverables": [
+                    "Dynamic pricing formula that handles all scenarios",
+                    "Edge case documentation",
+                    "Test cases proving formula accuracy"
+                ]
+            }
+        },
+        {
+            "id": "DA-L1-M03",
+            "sequence": 3,
+            "topic": "Lookup Functions: VLOOKUP, HLOOKUP, INDEX-MATCH, XLOOKUP",
+            "type": "lesson",
+            "duration_minutes": 60,
+            "description": "Connect data across multiple tables efficiently. Understand when to use each lookup method and why INDEX-MATCH and XLOOKUP are superior for production use.",
+            "key_concepts": [
+                "VLOOKUP basics and its critical limitations",
+                "Why approximate match is almost always wrong",
+                "INDEX-MATCH as the professional's choice",
+                "XLOOKUP: The modern replacement",
+                "Handling #N/A errors gracefully",
+                "Performance considerations for large datasets"
+            ],
+            "case_study": {
+                "title": "Customer 360 Dashboard",
+                "scenario": "A B2B SaaS company has customer data scattered across 4 different systems: CRM (customer details), Billing (subscription info), Support (ticket history), and Product (usage metrics). Build a unified Customer 360 view that pulls data from all sources using a single customer_id. Handle cases where customers exist in some systems but not others. Calculate a 'Health Score' based on: payment history, support ticket frequency, and product usage trends.",
+                "dataset": "customer_360_sources.xlsx",
+                "deliverables": [
+                    "Unified customer view with all data sources",
+                    "Health Score formula with documentation",
+                    "List of 'at-risk' customers (Health Score < 50)"
+                ]
+            }
+        },
+        {
+            "id": "DA-L1-M04",
+            "sequence": 4,
+            "topic": "Text Functions for Data Cleaning",
+            "type": "lesson",
+            "duration_minutes": 45,
+            "description": "Master text manipulation functions to clean messy real-world data. Learn to extract, transform, and standardize text data from various sources.",
+            "key_concepts": [
+                "LEFT, RIGHT, MID for text extraction",
+                "TRIM, CLEAN for whitespace and non-printable characters",
+                "UPPER, LOWER, PROPER for standardization",
+                "CONCATENATE vs CONCAT vs TEXTJOIN",
+                "TEXT function for formatting numbers/dates as text",
+                "Regular expression basics with REGEXMATCH, REGEXEXTRACT (Google Sheets)"
+            ],
+            "case_study": {
+                "title": "CRM Data Migration Nightmare",
+                "scenario": "A company is migrating from an old CRM to Salesforce. The legacy data has severe quality issues: names in 'LASTNAME, FIRSTNAME' format, phone numbers with inconsistent formatting (some with country codes, some without, some with dashes, some with spaces), addresses not split into proper fields, and email addresses mixed with notes in the same cell. Clean the dataset to Salesforce-ready format with separate First Name, Last Name, Phone (E.164 format), Street, City, State, ZIP, and Email fields.",
+                "dataset": "legacy_crm_export.csv",
+                "deliverables": [
+                    "Cleaned dataset matching Salesforce import template",
+                    "Data quality report (% of records with issues)",
+                    "Reusable text cleaning formula references"
+                ]
+            }
+        },
+        {
+            "id": "DA-L1-M05",
+            "sequence": 5,
+            "topic": "Array Formulas and Dynamic Arrays",
+            "type": "lesson",
+            "duration_minutes": 50,
+            "description": "Unlock the power of array formulas to perform complex calculations that would otherwise require multiple helper columns or VBA. Introduction to the new dynamic array paradigm.",
+            "key_concepts": [
+                "Traditional array formulas (Ctrl+Shift+Enter legacy)",
+                "Dynamic arrays: FILTER, SORT, SORTBY, UNIQUE",
+                "SEQUENCE and RANDARRAY for data generation",
+                "Spilling behavior and # references",
+                "Combining array functions for advanced analysis",
+                "LET function for readable complex formulas"
+            ],
+            "case_study": {
+                "title": "Sales Territory Optimization",
+                "scenario": "A pharmaceutical sales organization needs to analyze territory performance dynamically. Build a dashboard that allows users to: (1) Filter sales reps by region using dropdowns, (2) Automatically sort results by revenue or growth rate, (3) Identify the top 5 products per territory, (4) Calculate territory-level metrics without pivot tables. The solution must update automatically when data is added - no manual refresh.",
+                "dataset": "pharma_sales_territories.xlsx",
+                "deliverables": [
+                    "Dynamic filtering dashboard",
+                    "Top 5 products per territory (auto-updating)",
+                    "Territory comparison summary"
+                ]
+            }
+        },
+        {
+            "id": "DA-L1-C01",
+            "sequence": 6,
+            "topic": "Level 1 Final Challenge: Complete Business Analysis",
+            "type": "challenge",
+            "duration_minutes": 90,
+            "description": "Apply all Level 1 skills in a comprehensive business scenario. You will be graded by AI on correctness, efficiency, style, and business insight.",
+            "grading_criteria": {
+                "correctness": 40,
+                "efficiency": 25,
+                "style": 15,
+                "business_insight": 20
+            },
+            "case_study": {
+                "title": "Startup Runway Analysis",
+                "scenario": "You are a Data Analyst at a Series A startup. The CEO needs an urgent analysis for the board meeting tomorrow. Given the company's financial data (monthly burn rate, revenue by customer, team headcount, and pending deals), build a complete financial model that answers: (1) What is our current runway in months? (2) Which customers contribute most to revenue (Pareto analysis)? (3) If we close the pending deals, how does runway change? (4) At what growth rate do we become cash-flow positive? The model must be dynamic - the CEO wants to adjust assumptions and see results immediately.",
+                "dataset": "startup_financials.xlsx",
+                "deliverables": [
+                    "Dynamic runway calculator with adjustable assumptions",
+                    "Customer revenue Pareto chart (80/20 analysis)",
+                    "Deal scenario comparison (best/worst/expected case)",
+                    "Break-even growth rate calculation",
+                    "Executive summary in 3 bullet points"
+                ],
+                "minimum_passing_score": 70,
+                "time_limit_minutes": 90
+            }
+        }
+    ],
+    "tools": [
+        "Microsoft Excel 365",
+        "Google Sheets",
+        "LibreOffice Calc (alternative)"
+    ],
+    "certification": {
+        "badge_name": "Data Novice - Analyst Track",
+        "badge_icon": "spreadsheet_badge.png",
+        "credential_text": "Completed Data Academy Level 1: Data Novice (Analyst Track)"
+    }
+}
