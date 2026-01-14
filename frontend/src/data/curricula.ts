@@ -1,149 +1,149 @@
 import { analystTopics, scientistTopics } from './topics';
 
-// Basic Levels 1-5 (High Quality Manual Content)
+// Levels 1-5: Now using AI-Generated Content but with specific Titles/Topics
 const baseCurricula: any = {
     'level-1': {
         analyst: {
             title: 'Dasar-dasar SQL: Menguasai SELECT Query',
             isGenerated: true,
-            topic: 'SQL SELECT Statement & Fundamentals',
+            topic: 'SQL SELECT Statement, Filtering (WHERE), Sorting (ORDER BY), and Limits. Deep Dive into Relational Algebra concepts.',
             sections: [], // AI will fill this
             challenge: {
-                title: 'Query Data Customer',
-                description: `Tulis query SQL untuk menemukan 5 customer teratas berdasarkan total nilai order.\n1. Join tabel customers dan orders\n2. Hitung total nilai order\n3. Urutkan descending`,
-                starterCode: `-- Tulis query SQL kamu di sini\nSELECT \n  c.customer_name,\n  -- Hitung total nilai order\nFROM customers c\nJOIN orders o ON c.customer_id = o.customer_id\n-- Tambahkan logika di sini\n`,
+                title: 'Data Retrieval Foundation',
+                description: `Tulis query SQL untuk mengambil data customer yang valid dan mengurutkannya.\n\nFokus:\n1. Filter data\n2. Sorting result`,
+                starterCode: `-- Tulis query SQL kamu di sini\nSELECT * FROM customers WHERE ...`,
                 expectedOutput: `Query berhasil dijalankan`,
-                validation: {
-                    requiredKeywords: ['SELECT'],
-                    forbiddenKeywords: ['DELETE', 'DROP'],
-                    minLines: 4
-                }
+                validation: { requiredKeywords: ['SELECT', 'FROM', 'WHERE'], forbiddenKeywords: ['DELETE', 'DROP'], minLines: 1 }
             }
         },
         scientist: {
             title: 'SQL untuk Data Science: Deep Dive',
             isGenerated: true,
-            topic: 'SQL Data Retrieval & Filtering for Data Science',
+            topic: 'SQL Data Retrieval & Filtering with a focus on Data Science datasets and performance.',
             sections: [], // AI will fill this
             challenge: {
-                title: 'Query Data Customer',
-                description: `Tulis query SQL untuk menemukan 5 customer teratas berdasarkan total nilai order.`,
-                starterCode: `-- Tulis query SQL kamu di sini`,
+                title: 'Data Retrieval for ML',
+                description: `Ambil sample data untuk training model.`,
+                starterCode: `-- Tulis query SQL kamu di sini\n`,
                 expectedOutput: `Query berhasil dijalankan`,
-                validation: { requiredKeywords: ['SELECT'], forbiddenKeywords: ['DELETE'], minLines: 4 }
+                validation: { requiredKeywords: ['SELECT'], forbiddenKeywords: ['DELETE'], minLines: 1 }
             }
         },
     },
     'level-2': {
-        // We will generate Level 2-5 dynamically too, keeping titles.
-        'level-2': {
-            analyst: {
-                title: 'Level 2: Advanced JOIN & Reporting',
-                isGenerated: true,
-                topic: 'Advanced SQL Joins (LEFT, RIGHT, FULL) & Reporting',
-                sections: [],
-                challenge: { title: 'Laporan Penjualan', description: 'Buat laporan penjualan.', starterCode: 'SELECT ...', expectedOutput: 'Success', validation: { requiredKeywords: ['SELECT'], forbiddenKeywords: [], minLines: 1 } }
-            },
-            scientist: {
-                title: 'Level 2: Data Pipelines & Cleaning',
-                isGenerated: true,
-                topic: 'Data Pipelines, Cleaning & Missing Value Handling',
-                sections: [], // AI Fill
-                challenge: { title: 'Pipeline Cleaning', description: 'Bersihkan data.', starterCode: 'SELECT ...', expectedOutput: 'Success', validation: { requiredKeywords: ['SELECT'], forbiddenKeywords: [], minLines: 1 } }
-            }
-        },
-        'level-3': {
-            analyst: { title: 'Level 3: Window Functions', isGenerated: true, topic: 'Advanced Window Functions (RANK, LEAD, LAG)', sections: [], challenge: { title: 'Window Func', description: '.', starterCode: '', expectedOutput: '', validation: { requiredKeywords: [], forbiddenKeywords: [], minLines: 0 } } },
-            scientist: { title: 'Level 3: Feature Engineering', isGenerated: true, topic: 'Feature Engineering within SQL', sections: [], challenge: { title: 'Feature Eng', description: '.', starterCode: '', expectedOutput: '', validation: { requiredKeywords: [], forbiddenKeywords: [], minLines: 0 } } }
-        },
-        'level-4': {
-            analyst: { title: 'Level 4: CTE & Subqueries', isGenerated: true, topic: 'Common Table Expressions (CTE) & Complex Subqueries', sections: [], challenge: { title: 'Analysis with CTE', description: '.', starterCode: '', expectedOutput: '', validation: { requiredKeywords: [], forbiddenKeywords: [], minLines: 0 } } },
-            scientist: { title: 'Level 4: Data Prep Pipelines', isGenerated: true, topic: 'Complex Data Preparation Pipelines for ML', sections: [], challenge: { title: 'Prep Pipeline', description: '.', starterCode: '', expectedOutput: '', validation: { requiredKeywords: [], forbiddenKeywords: [], minLines: 0 } } }
-        },
-        'level-5': {
-            analyst: { title: 'Level 5: Data Validation', isGenerated: true, topic: 'Data Validation & Case Statements', sections: [], challenge: { title: 'Validation', description: '.', starterCode: '', expectedOutput: '', validation: { requiredKeywords: [], forbiddenKeywords: [], minLines: 0 } } },
-            scientist: { title: 'Level 5: Outlier Detection', isGenerated: true, topic: 'Statistical Outlier Detection in SQL', sections: [], challenge: { title: 'Outliers', description: '.', starterCode: '', expectedOutput: '', validation: { requiredKeywords: [], forbiddenKeywords: [], minLines: 0 } } }
-        },
-    };
-
-    // Generating Levels 6-100
-    const generatedCurricula: any = {};
-
-    // Generate Analyst Levels (6-100)
-    analystTopics.forEach((topic, index) => {
-        const levelNum = index + 6;
-        const levelKey = `level-${levelNum}`;
-
-        if (!generatedCurricula[levelKey]) generatedCurricula[levelKey] = {};
-
-        generatedCurricula[levelKey].analyst = {
+        analyst: {
+            title: 'Level 2: Advanced JOIN & Reporting',
             isGenerated: true,
-            topic: topic, // Pass topic for AI prompt
-            title: `Level ${levelNum}: ${topic}`,
-            sections: [
-                {
-                    heading: `Pengantar ${topic}`,
-                    content: `Di Level ${levelNum} ini, kita akan mempelajari ${topic} secara mendalam. Topik ini dipilih khusus untuk memperkuat skill Data Analytics anda.`,
-                },
-                {
-                    heading: 'Konsep Bisnis & Teknis',
-                    content: `Sebagai Analyst, pemahaman ${topic} membantu dalam pengambilan keputusan bisnis yang lebih akurat.`,
-                    code: `-- Contoh query untuk analisis ${topic}\nSELECT * FROM analysis_table WHERE type = '${topic}';`
-                },
-                {
-                    heading: 'Implementasi Nyata',
-                    content: `Studi kasus: Bagaimana perusahaan Unicorn menggunakan ${topic} untuk efisiensi.`
-                }
-            ],
-            challenge: {
-                title: `Tantangan: ${topic}`,
-                description: `Selesaikan masalah bisnis berikut menggunakan konsep ${topic}.\n\n1. Pahami kebutuhan user\n2. Gunakan query yang efisien\n3. Sajikan data yang relevan`,
-                starterCode: `-- Query ${topic}\nSELECT ...`,
-                expectedOutput: `Analisis ${topic} selesai.`,
-                validation: {
-                    requiredKeywords: ['SELECT'],
-                    forbiddenKeywords: ['DROP'],
-                    minLines: 1
-                }
-            }
-        };
-    });
+            topic: 'SQL Joins (INNER, LEFT, RIGHT, FULL) and reporting strategies.',
+            sections: [],
+            challenge: { title: 'Laporan Penjualan', description: 'Buat laporan penjualan.', starterCode: 'SELECT ...', expectedOutput: 'Success', validation: { requiredKeywords: ['SELECT'], forbiddenKeywords: [], minLines: 1 } }
+        },
+        scientist: {
+            title: 'Level 2: Data Pipelines & Cleaning',
+            isGenerated: true,
+            topic: 'Building Data Pipelines, Handling Missing Values, and Data Cleaning for ML.',
+            sections: [],
+            challenge: { title: 'Pipeline Cleaning', description: 'Bersihkan data.', starterCode: 'SELECT ...', expectedOutput: 'Success', validation: { requiredKeywords: ['SELECT'], forbiddenKeywords: [], minLines: 1 } }
+        }
+    },
+    'level-3': {
+        analyst: {
+            title: 'Level 3: Window Functions',
+            isGenerated: true,
+            topic: 'Advanced Window Functions (RANK, DENSE_RANK, LEAD, LAG) for Analytic Queries.',
+            sections: [],
+            challenge: { title: 'Window Analysis', description: 'Gunakan Window Function.', starterCode: 'SELECT ... OVER ...', expectedOutput: 'Success', validation: { requiredKeywords: ['OVER'], forbiddenKeywords: [], minLines: 1 } }
+        },
+        scientist: {
+            title: 'Level 3: Feature Engineering',
+            isGenerated: true,
+            topic: 'Feature Engineering directly within SQL (Rolling Averages, Cumulative Sums).',
+            sections: [],
+            challenge: { title: 'Feature Eng', description: 'Buat fitur baru.', starterCode: 'SELECT ...', expectedOutput: 'Success', validation: { requiredKeywords: ['SELECT'], forbiddenKeywords: [], minLines: 1 } }
+        }
+    },
+    'level-4': {
+        analyst: {
+            title: 'Level 4: CTE & Subqueries',
+            isGenerated: true,
+            topic: 'Common Table Expressions (CTE) and Recursive Queries for solving complex business problems.',
+            sections: [],
+            challenge: { title: 'CTE Analysis', description: 'Gunakan CTE.', starterCode: 'WITH ...', expectedOutput: 'Success', validation: { requiredKeywords: ['WITH'], forbiddenKeywords: [], minLines: 1 } }
+        },
+        scientist: {
+            title: 'Level 4: Data Prep Pipelines',
+            isGenerated: true,
+            topic: 'Complex Data Preparation Steps for Machine Learning Models using SQL.',
+            sections: [],
+            challenge: { title: 'Data Prep', description: 'Siapkan data.', starterCode: 'SELECT ...', expectedOutput: 'Success', validation: { requiredKeywords: ['SELECT'], forbiddenKeywords: [], minLines: 1 } }
+        }
+    },
+    'level-5': {
+        analyst: {
+            title: 'Level 5: Data Validation',
+            isGenerated: true,
+            topic: 'Data Quality Assurance, Validation Techniques, and CASE Statements.',
+            sections: [],
+            challenge: { title: 'Data QA', description: 'Validasi data.', starterCode: 'SELECT CASE ...', expectedOutput: 'Success', validation: { requiredKeywords: ['CASE'], forbiddenKeywords: [], minLines: 1 } }
+        },
+        scientist: {
+            title: 'Level 5: Outlier Detection',
+            isGenerated: true,
+            topic: 'Statistical Outlier Detection (Z-Score, IQR) using SQL.',
+            sections: [],
+            challenge: { title: 'Outlier Detection', description: 'Detect outliers.', starterCode: 'SELECT ...', expectedOutput: 'Success', validation: { requiredKeywords: ['SELECT'], forbiddenKeywords: [], minLines: 1 } }
+        }
+    },
+};
 
-    // Generate Scientist Levels (6-100)
-    scientistTopics.forEach((topic, index) => {
-        const levelNum = index + 6;
-        const levelKey = `level-${levelNum}`;
+// Generating Levels 6-100
+const generatedCurricula: any = {};
 
-        if (!generatedCurricula[levelKey]) generatedCurricula[levelKey] = {};
+// Generate Analyst Levels (6-100)
+analystTopics.forEach((topic, index) => {
+    const levelNum = index + 6;
+    const levelKey = `level-${levelNum}`;
 
-        generatedCurricula[levelKey].scientist = {
-            title: `Level ${levelNum}: ${topic}`,
-            sections: [
-                {
-                    heading: `Konsep Dasar ${topic}`,
-                    content: `Dalam Data Science, ${topic} adalah fondasi penting. Kita akan membedah matematikanya dan implementasi codenya.`,
-                },
-                {
-                    heading: 'Algoritma & Logika',
-                    content: `Pelajari bagaimana ${topic} bekerja di balik layar.`,
-                    code: `# Contoh pseudo-code Python untuk ${topic}\ndef ${topic.toLowerCase().replace(/ /g, '_')}():\n    pass`
-                },
-                {
-                    heading: 'Aplikasi AI/ML',
-                    content: `Bagaimana ${topic} digunakan dalam model State-of-the-Art saat ini.`
-                }
-            ],
-            challenge: {
-                title: `Lab: ${topic}`,
-                description: `Implementasikan algoritma atau logika untuk ${topic}.`,
-                starterCode: `# Scientist Algorithm\n# ...`,
-                expectedOutput: `Model Converged`,
-                validation: { requiredKeywords: [], forbiddenKeywords: [], minLines: 1 }
-            }
-        };
-    });
+    if (!generatedCurricula[levelKey]) generatedCurricula[levelKey] = {};
 
-    export const curricula = {
-        ...baseCurricula,
-        ...generatedCurricula
+    generatedCurricula[levelKey].analyst = {
+        title: `Level ${levelNum}: ${topic}`,
+        isGenerated: true,
+        topic: topic,
+        sections: [],
+        challenge: {
+            title: `Tantangan: ${topic}`,
+            description: `Selesaikan masalah bisnis berikut menggunakan konsep ${topic}.`,
+            starterCode: `-- Query ${topic}\nSELECT ...`,
+            expectedOutput: `Analisis ${topic} selesai.`,
+            validation: { requiredKeywords: ['SELECT'], forbiddenKeywords: ['DROP'], minLines: 1 }
+        }
     };
+});
+
+// Generate Scientist Levels (6-100)
+scientistTopics.forEach((topic, index) => {
+    const levelNum = index + 6;
+    const levelKey = `level-${levelNum}`;
+
+    if (!generatedCurricula[levelKey]) generatedCurricula[levelKey] = {};
+
+    generatedCurricula[levelKey].scientist = {
+        title: `Level ${levelNum}: ${topic}`,
+        isGenerated: true,
+        topic: topic,
+        sections: [],
+        challenge: {
+            title: `Lab: ${topic}`,
+            description: `Implementasikan algoritma atau logika untuk ${topic}.`,
+            starterCode: `# Scientist Algorithm\n# ...`,
+            expectedOutput: `Model Converged`,
+            validation: { requiredKeywords: [], forbiddenKeywords: [], minLines: 1 }
+        }
+    };
+});
+
+export const curricula = {
+    ...baseCurricula,
+    ...generatedCurricula
+};

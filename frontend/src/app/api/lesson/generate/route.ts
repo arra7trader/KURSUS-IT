@@ -12,9 +12,9 @@ export async function POST(req: Request) {
 
         const model = new ChatGroq({
             apiKey: process.env.GROQ_API_KEY,
-            model: "llama3-70b-8192", // Using 70B for high quality teaching
+            model: "llama3-70b-8192",
             temperature: 0.5
-        });
+        } as any); // Cast to any to avoid type complaints about model vs modelName
 
         const prompt = ChatPromptTemplate.fromMessages([
             ["system", `You are an expert Data Science & Analytics Professor at a top university. 
