@@ -38,3 +38,7 @@ coverage/
 # Prisma
 prisma/*.db
 prisma/*.db-journal
+
+# Drizzle
+drizzle/
+

@@ -1,0 +1,11 @@
+{
+    "buildCommand": "cd frontend && npm install && npm run build",
+    "outputDirectory": "frontend/.next",
+    "framework": "nextjs",
+    "installCommand": "cd frontend && npm install",
+    "env": {
+        "TURSO_DATABASE_URL": "@turso_database_url",
+        "TURSO_AUTH_TOKEN": "@turso_auth_token",
+        "GROQ_API_KEY": "@groq_api_key"
+    }
+}
