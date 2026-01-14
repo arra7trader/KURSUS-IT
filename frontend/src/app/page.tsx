@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import {
@@ -36,6 +37,12 @@ export default function LandingPage() {
                         <span className="text-2xl font-bold text-gray-900">
                             Data<span className="text-blue-600">Academy</span>
                         </span>
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                        <Link href="/login" className="px-5 py-2.5 rounded-xl bg-gray-900 text-white font-semibold hover:bg-gray-800 transition-all shadow-lg hover:shadow-xl">
+                            Masuk
+                        </Link>
                     </div>
                 </nav>
             </header>
@@ -114,8 +121,8 @@ export default function LandingPage() {
                         onHoverStart={() => setHoveredSide('analyst')}
                         onHoverEnd={() => setHoveredSide(null)}
                         className={`relative bg-white rounded-2xl border-2 p-8 shadow-lg transition-all duration-300 cursor-pointer ${hoveredSide === 'scientist'
-                                ? 'border-gray-200 opacity-70'
-                                : 'border-blue-200 hover:border-blue-400 hover:shadow-blue-100'
+                            ? 'border-gray-200 opacity-70'
+                            : 'border-blue-200 hover:border-blue-400 hover:shadow-blue-100'
                             }`}
                         onClick={() => selectPath('analyst')}
                     >
@@ -183,8 +190,8 @@ export default function LandingPage() {
                         onHoverStart={() => setHoveredSide('scientist')}
                         onHoverEnd={() => setHoveredSide(null)}
                         className={`relative bg-white rounded-2xl border-2 p-8 shadow-lg transition-all duration-300 cursor-pointer ${hoveredSide === 'analyst'
-                                ? 'border-gray-200 opacity-70'
-                                : 'border-purple-200 hover:border-purple-400 hover:shadow-purple-100'
+                            ? 'border-gray-200 opacity-70'
+                            : 'border-purple-200 hover:border-purple-400 hover:shadow-purple-100'
                             }`}
                         onClick={() => selectPath('scientist')}
                     >

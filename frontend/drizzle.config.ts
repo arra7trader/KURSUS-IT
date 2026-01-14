@@ -1,13 +1,15 @@
-// @ts-nocheck
-import 'dotenv/config';
+import { defineConfig } from 'drizzle-kit';
+import * as dotenv from 'dotenv';
 
-/** @type {import('drizzle-kit').Config} */
-export default {
+// Load .env.local because Next.js stores secrets there
+dotenv.config({ path: '.env.local' });
+
+export default defineConfig({
     schema: './src/db/schema.ts',
     out: './drizzle',
-    driver: 'turso',
+    dialect: 'sqlite',
     dbCredentials: {
-        url: process.env.TURSO_DATABASE_URL || '',
-        authToken: process.env.TURSO_AUTH_TOKEN || '',
+        url: process.env.TURSO_DATABASE_URL!,
+        authToken: process.env.TURSO_AUTH_TOKEN!,
     },
-};
+});
