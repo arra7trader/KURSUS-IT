@@ -20,372 +20,293 @@ export default function LandingPage() {
     const router = useRouter();
     const [hoveredSide, setHoveredSide] = useState<'analyst' | 'scientist' | null>(null);
 
-    const selectPath = (path: 'ANALYST' | 'SCIENTIST') => {
-        // Simpan path yang dipilih dan redirect ke onboarding/dashboard
-        localStorage.setItem('selectedPath', path);
-        router.push(`/onboarding?path=${path.toLowerCase()}`);
+    const selectPath = (path: 'analyst' | 'scientist') => {
+        router.push(`/learn/${path}/level-1`);
     };
 
     return (
-        <div className="min-h-screen bg-gray-950 overflow-hidden">
-            {/* Hero Section */}
-            <header className="relative z-10">
-                <nav className="container mx-auto px-6 py-6 flex items-center justify-between">
-                    <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="flex items-center gap-3"
-                    >
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-analyst-500 to-scientist-500 flex items-center justify-center">
-                            <Sparkles className="w-6 h-6 text-white" />
+        <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+            {/* Header */}
+            <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+                <nav className="container mx-auto px-6 py-4 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
+                            <Sparkles className="w-5 h-5 text-white" />
                         </div>
-                        <span className="font-display text-2xl font-bold text-white">
-                            Data<span className="text-gradient-analyst">Academy</span>
+                        <span className="text-2xl font-bold text-gray-900">
+                            Data<span className="text-blue-600">Academy</span>
                         </span>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="flex items-center gap-4"
-                    >
-                        <button className="px-4 py-2 text-gray-400 hover:text-white transition-colors">
-                            Masuk
-                        </button>
-                        <button className="px-6 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium transition-all">
-                            Mulai Belajar
-                        </button>
-                    </motion.div>
+                    </div>
                 </nav>
-
-                {/* Hero Content */}
-                <div className="container mx-auto px-6 py-12 text-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                    >
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6">
-                            <Sparkles className="w-4 h-4 text-yellow-400" />
-                            <span className="text-sm text-gray-300">🚀 Akademi Berbasis AI dengan Standar Internasional</span>
-                        </div>
-
-                        <h1 className="font-display text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-                            Kuasai Skill Data bareng
-                            <br />
-                            <span className="bg-gradient-to-r from-analyst-400 via-scientist-400 to-pink-400 bg-clip-text text-transparent">
-                                Mentor AI Pribadi Kamu
-                            </span>
-                        </h1>
-
-                        <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-8">
-                            Pilih jalur karirmu. Belajar dari AI tutor yang adaptif dengan gaya belajar kamu.
-                            Latihan dengan coding challenge nyata. Dapet feedback instan yang bermanfaat.
-                        </p>
-
-                        {/* Stats */}
-                        <div className="flex items-center justify-center gap-12 mb-16">
-                            {[
-                                { icon: Users, label: 'Murid Aktif', value: '10.000+' },
-                                { icon: Code2, label: 'Coding Challenge', value: '500+' },
-                                { icon: Award, label: 'Tingkat Kelulusan', value: '94%' },
-                            ].map((stat, i) => (
-                                <motion.div
-                                    key={stat.label}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.4 + i * 0.1 }}
-                                    className="text-center"
-                                >
-                                    <stat.icon className="w-6 h-6 text-gray-500 mx-auto mb-2" />
-                                    <div className="text-2xl font-bold text-white">{stat.value}</div>
-                                    <div className="text-sm text-gray-500">{stat.label}</div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </motion.div>
-                </div>
             </header>
 
-            {/* Split Screen Path Selection */}
+            {/* Hero Section */}
+            <section className="container mx-auto px-6 py-16 text-center">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                >
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 mb-6">
+                        <Sparkles className="w-4 h-4 text-blue-600" />
+                        <span className="text-sm text-blue-700 font-medium">🚀 Akademi AI dengan Standar Internasional</span>
+                    </div>
+
+                    <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                        Kuasai Skill Data bareng
+                        <br />
+                        <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                            Mentor AI Pribadi Kamu
+                        </span>
+                    </h1>
+
+                    <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-12">
+                        Pilih jalur karirmu. Belajar dari AI tutor yang adaptif.
+                        Latihan dengan coding challenge nyata. Dapet feedback instan.
+                    </p>
+
+                    {/* Stats */}
+                    <div className="flex items-center justify-center gap-12 mb-16">
+                        {[
+                            { icon: Users, label: 'Murid Aktif', value: '10.000+' },
+                            { icon: Code2, label: 'Coding Challenge', value: '500+' },
+                            { icon: Award, label: 'Tingkat Kelulusan', value: '94%' },
+                        ].map((stat, i) => (
+                            <motion.div
+                                key={stat.label}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.2 + i * 0.1 }}
+                                className="text-center"
+                            >
+                                <stat.icon className="w-6 h-6 text-gray-400 mx-auto mb-2" />
+                                <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
+                                <div className="text-sm text-gray-500">{stat.label}</div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </motion.div>
+            </section>
+
+            {/* Path Selection */}
             <section className="container mx-auto px-6 pb-20">
                 <motion.div
-                    initial={{ opacity: 0, y: 40 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6 }}
+                    transition={{ delay: 0.3 }}
                     className="text-center mb-12"
                 >
-                    <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4">
+                    <h2 className="text-3xl font-bold text-gray-900 mb-3">
                         Pilih Jalur Karirmu
                     </h2>
-                    <p className="text-gray-400 text-lg">
+                    <p className="text-gray-600">
                         Dua perjalanan berbeda. Dua mentor AI. Satu tujuan: Kesuksesan kamu.
                     </p>
                 </motion.div>
 
-                <div className="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto">
-                    {/* Data Analyst Card - Rendy */}
+                <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    {/* Data Analyst Card */}
                     <motion.div
-                        initial={{ opacity: 0, x: -50 }}
+                        initial={{ opacity: 0, x: -30 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.7 }}
-                        whileHover={{ scale: 1.02 }}
+                        transition={{ delay: 0.4 }}
+                        whileHover={{ scale: 1.02, y: -5 }}
                         onHoverStart={() => setHoveredSide('analyst')}
                         onHoverEnd={() => setHoveredSide(null)}
-                        className={`relative overflow-hidden rounded-3xl transition-all duration-500 ${hoveredSide === 'scientist' ? 'opacity-60' : 'opacity-100'
+                        className={`relative bg-white rounded-2xl border-2 p-8 shadow-lg transition-all duration-300 cursor-pointer ${hoveredSide === 'scientist'
+                                ? 'border-gray-200 opacity-70'
+                                : 'border-blue-200 hover:border-blue-400 hover:shadow-blue-100'
                             }`}
+                        onClick={() => selectPath('analyst')}
                     >
-                        {/* Background */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-analyst-900/80 via-analyst-800/50 to-gray-900 z-0" />
-                        <div className="absolute inset-0 bg-mesh-analyst z-0" />
-                        <div className="absolute inset-0 bg-grid-pattern opacity-30 z-0" />
-
-                        {/* Floating Elements */}
-                        <motion.div
-                            animate={{ y: [0, -15, 0] }}
-                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                            className="absolute top-10 right-10 w-20 h-20 rounded-2xl bg-analyst-500/20 backdrop-blur-sm border border-analyst-400/20 flex items-center justify-center z-10"
-                        >
-                            <BarChart3 className="w-10 h-10 text-analyst-400" />
-                        </motion.div>
-
-                        <motion.div
-                            animate={{ y: [0, 10, 0] }}
-                            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                            className="absolute bottom-20 right-20 w-16 h-16 rounded-xl bg-cyan-500/20 backdrop-blur-sm border border-cyan-400/20 flex items-center justify-center z-10"
-                        >
-                            <TrendingUp className="w-8 h-8 text-cyan-400" />
-                        </motion.div>
-
-                        {/* Content */}
-                        <div className="relative z-20 p-10 min-h-[500px] flex flex-col">
-                            {/* Mentor Badge */}
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-analyst-500 to-analyst-600 flex items-center justify-center text-xl font-bold text-white shadow-lg shadow-analyst-500/30">
-                                    R
-                                </div>
-                                <div>
-                                    <div className="text-white font-semibold">Mentor: Rendy</div>
-                                    <div className="text-analyst-400 text-sm">Expert Data Analyst</div>
-                                </div>
-                            </div>
-
-                            {/* Title */}
-                            <div className="mb-6">
-                                <div className="text-analyst-400 text-sm font-semibold uppercase tracking-wider mb-2">
-                                    Jalur Bisnis
-                                </div>
-                                <h3 className="font-display text-4xl font-bold text-white mb-3">
-                                    Data Analyst
-                                </h3>
-                                <p className="text-gray-300 text-lg leading-relaxed">
-                                    Ubah data mentah jadi insight bisnis yang actionable.
-                                    Kuasai SQL, visualisasi, dan storytelling dengan data.
-                                </p>
-                            </div>
-
-                            {/* Skills */}
-                            <div className="mb-8 flex-grow">
-                                <div className="text-sm text-gray-400 mb-3">Yang Bakal Kamu Kuasai:</div>
-                                <div className="flex flex-wrap gap-2">
-                                    {['SQL', 'Excel', 'Tableau', 'Power BI', 'Python Pandas', 'Statistik'].map((skill) => (
-                                        <span
-                                            key={skill}
-                                            className="px-3 py-1 rounded-full bg-analyst-500/20 border border-analyst-400/30 text-analyst-300 text-sm"
-                                        >
-                                            {skill}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Philosophy */}
-                            <div className="mb-8 p-4 rounded-xl bg-black/20 border border-analyst-500/20">
-                                <div className="text-analyst-400 text-sm mb-1">Filosofi Rendy:</div>
-                                <p className="text-white italic">
-                                    "Data cuma berguna kalau bisa bikin duit atau hemat waktu."
-                                </p>
-                            </div>
-
-                            {/* CTA Button */}
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.98 }}
-                                onClick={() => selectPath('ANALYST')}
-                                className="btn-analyst flex items-center justify-center gap-3 w-full"
-                            >
-                                <Play className="w-5 h-5" />
-                                Jadi Data Analyst
-                                <ChevronRight className="w-5 h-5" />
-                            </motion.button>
+                        {/* Icon */}
+                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-6 shadow-lg">
+                            <BarChart3 className="w-8 h-8 text-white" />
                         </div>
+
+                        {/* Mentor */}
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
+                                R
+                            </div>
+                            <div>
+                                <div className="font-semibold text-gray-900">Mentor: Rendy</div>
+                                <div className="text-sm text-blue-600">Expert Data Analyst</div>
+                            </div>
+                        </div>
+
+                        {/* Title */}
+                        <div className="text-sm text-blue-600 font-semibold uppercase tracking-wider mb-2">
+                            Jalur Bisnis
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                            Data Analyst
+                        </h3>
+                        <p className="text-gray-600 mb-6">
+                            Ubah data mentah jadi insight bisnis yang actionable.
+                            Kuasai SQL, visualisasi, dan storytelling dengan data.
+                        </p>
+
+                        {/* Skills */}
+                        <div className="flex flex-wrap gap-2 mb-6">
+                            {['SQL', 'Excel', 'Tableau', 'Power BI', 'Pandas'].map((skill) => (
+                                <span
+                                    key={skill}
+                                    className="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-medium"
+                                >
+                                    {skill}
+                                </span>
+                            ))}
+                        </div>
+
+                        {/* Philosophy */}
+                        <div className="p-4 rounded-xl bg-blue-50 border border-blue-100 mb-6">
+                            <p className="text-gray-700 italic text-sm">
+                                "Data cuma berguna kalau bisa bikin duit atau hemat waktu."
+                            </p>
+                        </div>
+
+                        {/* CTA */}
+                        <button className="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold flex items-center justify-center gap-2 hover:from-blue-500 hover:to-blue-400 transition-all shadow-lg shadow-blue-200">
+                            <Play className="w-5 h-5" />
+                            Mulai Belajar
+                            <ChevronRight className="w-5 h-5" />
+                        </button>
                     </motion.div>
 
-                    {/* Data Scientist Card - Abdul */}
+                    {/* Data Scientist Card */}
                     <motion.div
-                        initial={{ opacity: 0, x: 50 }}
+                        initial={{ opacity: 0, x: 30 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.8 }}
-                        whileHover={{ scale: 1.02 }}
+                        transition={{ delay: 0.5 }}
+                        whileHover={{ scale: 1.02, y: -5 }}
                         onHoverStart={() => setHoveredSide('scientist')}
                         onHoverEnd={() => setHoveredSide(null)}
-                        className={`relative overflow-hidden rounded-3xl transition-all duration-500 ${hoveredSide === 'analyst' ? 'opacity-60' : 'opacity-100'
+                        className={`relative bg-white rounded-2xl border-2 p-8 shadow-lg transition-all duration-300 cursor-pointer ${hoveredSide === 'analyst'
+                                ? 'border-gray-200 opacity-70'
+                                : 'border-purple-200 hover:border-purple-400 hover:shadow-purple-100'
                             }`}
+                        onClick={() => selectPath('scientist')}
                     >
-                        {/* Background */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-scientist-900/80 via-scientist-800/50 to-gray-900 z-0" />
-                        <div className="absolute inset-0 bg-mesh-scientist z-0" />
-                        <div className="absolute inset-0 bg-grid-pattern opacity-30 z-0" />
-
-                        {/* Floating Elements */}
-                        <motion.div
-                            animate={{ y: [0, -15, 0] }}
-                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                            className="absolute top-10 right-10 w-20 h-20 rounded-2xl bg-scientist-500/20 backdrop-blur-sm border border-scientist-400/20 flex items-center justify-center z-10"
-                        >
-                            <Brain className="w-10 h-10 text-scientist-400" />
-                        </motion.div>
-
-                        <motion.div
-                            animate={{ y: [0, 10, 0] }}
-                            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                            className="absolute bottom-20 right-20 w-16 h-16 rounded-xl bg-pink-500/20 backdrop-blur-sm border border-pink-400/20 flex items-center justify-center z-10"
-                        >
-                            <Cpu className="w-8 h-8 text-pink-400" />
-                        </motion.div>
-
-                        {/* Content */}
-                        <div className="relative z-20 p-10 min-h-[500px] flex flex-col">
-                            {/* Mentor Badge */}
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-scientist-500 to-scientist-600 flex items-center justify-center text-xl font-bold text-white shadow-lg shadow-scientist-500/30">
-                                    A
-                                </div>
-                                <div>
-                                    <div className="text-white font-semibold">Mentor: Abdul</div>
-                                    <div className="text-scientist-400 text-sm">Expert Data Scientist</div>
-                                </div>
-                            </div>
-
-                            {/* Title */}
-                            <div className="mb-6">
-                                <div className="text-scientist-400 text-sm font-semibold uppercase tracking-wider mb-2">
-                                    Jalur Saintifik
-                                </div>
-                                <h3 className="font-display text-4xl font-bold text-white mb-3">
-                                    Data Scientist
-                                </h3>
-                                <p className="text-gray-300 text-lg leading-relaxed">
-                                    Bangun sistem cerdas yang bisa belajar dan prediksi.
-                                    Kuasai machine learning, deep learning, dan AI.
-                                </p>
-                            </div>
-
-                            {/* Skills */}
-                            <div className="mb-8 flex-grow">
-                                <div className="text-sm text-gray-400 mb-3">Yang Bakal Kamu Kuasai:</div>
-                                <div className="flex flex-wrap gap-2">
-                                    {['Python', 'TensorFlow', 'PyTorch', 'Scikit-learn', 'Statistik', 'Deep Learning'].map((skill) => (
-                                        <span
-                                            key={skill}
-                                            className="px-3 py-1 rounded-full bg-scientist-500/20 border border-scientist-400/30 text-scientist-300 text-sm"
-                                        >
-                                            {skill}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Philosophy */}
-                            <div className="mb-8 p-4 rounded-xl bg-black/20 border border-scientist-500/20">
-                                <div className="text-scientist-400 text-sm mb-1">Filosofi Abdul:</div>
-                                <p className="text-white italic">
-                                    "Pahami matematika di balik algoritmanya."
-                                </p>
-                            </div>
-
-                            {/* CTA Button */}
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.98 }}
-                                onClick={() => selectPath('SCIENTIST')}
-                                className="btn-scientist flex items-center justify-center gap-3 w-full"
-                            >
-                                <Play className="w-5 h-5" />
-                                Jadi Data Scientist
-                                <ChevronRight className="w-5 h-5" />
-                            </motion.button>
+                        {/* Icon */}
+                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-6 shadow-lg">
+                            <Brain className="w-8 h-8 text-white" />
                         </div>
+
+                        {/* Mentor */}
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold">
+                                A
+                            </div>
+                            <div>
+                                <div className="font-semibold text-gray-900">Mentor: Abdul</div>
+                                <div className="text-sm text-purple-600">Expert Data Scientist</div>
+                            </div>
+                        </div>
+
+                        {/* Title */}
+                        <div className="text-sm text-purple-600 font-semibold uppercase tracking-wider mb-2">
+                            Jalur Saintifik
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                            Data Scientist
+                        </h3>
+                        <p className="text-gray-600 mb-6">
+                            Bangun sistem cerdas yang bisa belajar dan prediksi.
+                            Kuasai machine learning, deep learning, dan AI.
+                        </p>
+
+                        {/* Skills */}
+                        <div className="flex flex-wrap gap-2 mb-6">
+                            {['Python', 'TensorFlow', 'PyTorch', 'Scikit-learn', 'Stats'].map((skill) => (
+                                <span
+                                    key={skill}
+                                    className="px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-sm font-medium"
+                                >
+                                    {skill}
+                                </span>
+                            ))}
+                        </div>
+
+                        {/* Philosophy */}
+                        <div className="p-4 rounded-xl bg-purple-50 border border-purple-100 mb-6">
+                            <p className="text-gray-700 italic text-sm">
+                                "Pahami matematika di balik algoritmanya."
+                            </p>
+                        </div>
+
+                        {/* CTA */}
+                        <button className="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-purple-600 to-purple-500 text-white font-semibold flex items-center justify-center gap-2 hover:from-purple-500 hover:to-purple-400 transition-all shadow-lg shadow-purple-200">
+                            <Play className="w-5 h-5" />
+                            Mulai Belajar
+                            <ChevronRight className="w-5 h-5" />
+                        </button>
                     </motion.div>
                 </div>
             </section>
 
-            {/* Features Section */}
-            <section className="container mx-auto px-6 py-20 border-t border-white/5">
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-center mb-16"
-                >
-                    <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4">
-                        Kenapa Data Academy?
-                    </h2>
-                    <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-                        Pengalaman belajar yang dirancang khusus buat profesional data modern
-                    </p>
-                </motion.div>
+            {/* Features */}
+            <section className="bg-gray-50 py-20">
+                <div className="container mx-auto px-6">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl font-bold text-gray-900 mb-3">
+                            Kenapa Data Academy?
+                        </h2>
+                        <p className="text-gray-600">
+                            Pengalaman belajar untuk profesional data modern
+                        </p>
+                    </div>
 
-                <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                    {[
-                        {
-                            icon: Sparkles,
-                            title: 'Feedback Berbasis AI',
-                            description: 'Dapet feedback instan dan personal dari AI tutor yang paham konteks kamu.',
-                            gradient: 'from-yellow-500 to-orange-500',
-                        },
-                        {
-                            icon: Code2,
-                            title: 'IDE di Browser',
-                            description: 'Tulis dan jalankan Python & SQL langsung di browser. Gak perlu install apa-apa.',
-                            gradient: 'from-analyst-500 to-cyan-500',
-                        },
-                        {
-                            icon: Award,
-                            title: 'Sistem Level',
-                            description: 'Unlock level baru setelah buktiin kemampuan kamu. Gak bisa skip tanpa lulus!',
-                            gradient: 'from-scientist-500 to-pink-500',
-                        },
-                    ].map((feature, i) => (
-                        <motion.div
-                            key={feature.title}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: i * 0.1 }}
-                            className="glass-card p-8 hover:bg-white/10 transition-all duration-300"
-                        >
-                            <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 shadow-lg`}>
-                                <feature.icon className="w-7 h-7 text-white" />
+                    <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                        {[
+                            {
+                                icon: Sparkles,
+                                title: 'Feedback AI',
+                                description: 'Dapet feedback instan dan personal dari AI tutor.',
+                                color: 'text-yellow-600',
+                                bg: 'bg-yellow-50',
+                            },
+                            {
+                                icon: Code2,
+                                title: 'IDE di Browser',
+                                description: 'Tulis dan jalankan Python & SQL langsung di browser.',
+                                color: 'text-blue-600',
+                                bg: 'bg-blue-50',
+                            },
+                            {
+                                icon: Award,
+                                title: 'Sistem Level',
+                                description: 'Unlock level baru setelah buktiin kemampuan kamu.',
+                                color: 'text-purple-600',
+                                bg: 'bg-purple-50',
+                            },
+                        ].map((feature) => (
+                            <div
+                                key={feature.title}
+                                className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                            >
+                                <div className={`w-12 h-12 rounded-xl ${feature.bg} flex items-center justify-center mb-4`}>
+                                    <feature.icon className={`w-6 h-6 ${feature.color}`} />
+                                </div>
+                                <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
+                                <p className="text-gray-600 text-sm">{feature.description}</p>
                             </div>
-                            <h3 className="text-xl font-semibold text-white mb-3">{feature.title}</h3>
-                            <p className="text-gray-400 leading-relaxed">{feature.description}</p>
-                        </motion.div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </section>
 
             {/* Footer */}
-            <footer className="border-t border-white/5 py-12">
+            <footer className="bg-white border-t border-gray-100 py-8">
                 <div className="container mx-auto px-6 text-center">
-                    <div className="flex items-center justify-center gap-3 mb-4">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-analyst-500 to-scientist-500 flex items-center justify-center">
+                    <div className="flex items-center justify-center gap-2 mb-3">
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
                             <Sparkles className="w-4 h-4 text-white" />
                         </div>
-                        <span className="font-display text-xl font-bold text-white">DataAcademy</span>
+                        <span className="text-lg font-bold text-gray-900">DataAcademy</span>
                     </div>
                     <p className="text-gray-500 text-sm">
-                        © 2024 Data Academy. Memberdayakan generasi profesional data masa depan.
+                        © 2024 Data Academy. Memberdayakan generasi profesional data.
                     </p>
                 </div>
             </footer>
