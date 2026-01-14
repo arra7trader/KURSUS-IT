@@ -132,14 +132,87 @@ export default function LessonPage({
     const [isGrading, setIsGrading] = useState(false);
     const [gradeResult, setGradeResult] = useState<GradeResult | null>(null);
 
-    // Chat state
+    // Chat state - Mentor langsung memberikan kuliah, bukan menunggu pertanyaan
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
         {
             id: '1',
             role: 'assistant',
             content: isAnalyst
-                ? `Halo! Saya Rendy, mentor Data Analyst kamu. 👋\n\nSekarang kita bakal belajar tentang SQL queries untuk ngambil data customer. Ingat ya, "Data cuma berguna kalau bisa bikin duit atau hemat waktu." Jadi pastikan query kamu efisien!\n\nAda yang bisa saya bantu?`
-                : `Halo! Saya Abdul, mentor Data Science kamu. 👋\n\nHari ini kita akan explore dasar-dasar SQL. Ingat, "Pahami matematika di balik algoritmanya." Bahkan di SQL, memahami kompleksitas query itu penting.\n\nAda yang mau ditanyakan?`,
+                ? `📚 **KULIAH: Dasar-dasar SQL - SELECT Query**
+
+Halo! Saya Rendy, dan hari ini kita mulai dari yang paling fundamental: **SELECT statement**.
+
+---
+
+**Apa itu SELECT?**
+SELECT adalah perintah untuk mengambil data dari database. Analoginya seperti kamu lagi belanja di supermarket - SELECT adalah daftar belanjamu.
+
+**Struktur Dasar:**
+\`\`\`sql
+SELECT kolom1, kolom2
+FROM nama_tabel
+WHERE kondisi;
+\`\`\`
+
+**Contoh Nyata di Dunia Kerja:**
+Misal bos kamu minta: "Kasih saya daftar customer yang order lebih dari Rp10 juta"
+
+\`\`\`sql
+SELECT customer_name, total_order
+FROM customers
+WHERE total_order > 10000000;
+\`\`\`
+
+---
+
+**💡 Tips dari Saya:**
+Di dunia nyata, query yang lambat = bos marah = karir terhambat. Jadi selalu pikirkan efisiensi!
+
+Sekarang coba kerjakan tantangan di sebelah kanan. Kamu perlu gabungkan 2 tabel pakai JOIN. Kalau bingung, tanya saja!`
+                : `📚 **KULIAH: Dasar-dasar SQL untuk Data Science**
+
+Halo! Saya Abdul. Mari kita mulai dengan memahami SQL dari perspektif Data Scientist.
+
+---
+
+**Kenapa SQL Penting untuk Data Science?**
+Sebelum kamu bisa training model ML, kamu butuh **data yang bersih**. Dan 90% data perusahaan ada di database relasional.
+
+**Konsep Fundamental:**
+\`\`\`sql
+SELECT kolom1, kolom2
+FROM tabel_a
+JOIN tabel_b ON tabel_a.id = tabel_b.id
+GROUP BY kolom1;
+\`\`\`
+
+**Kompleksitas Query (Big O):**
+- SELECT tanpa index: O(n) - linear scan
+- SELECT dengan index: O(log n) - binary search
+- JOIN tanpa index: O(n×m) - worst case!
+
+---
+
+**Studi Kasus: Feature Engineering**
+Misal kamu mau prediksi customer churn. Kamu butuh fitur seperti:
+- Total order per customer
+- Rata-rata nilai order
+- Frekuensi order
+
+Semua ini bisa dihitung dengan SQL:
+\`\`\`sql
+SELECT customer_id,
+       COUNT(*) as order_count,
+       AVG(order_value) as avg_order,
+       SUM(order_value) as total_spent
+FROM orders
+GROUP BY customer_id;
+\`\`\`
+
+---
+
+**📝 Tantangan:**
+Sekarang coba kerjakan challenge di samping. Kamu perlu menemukan top 5 customer. Pikirkan kompleksitas query-nya!`,
             timestamp: new Date(),
         },
     ]);
