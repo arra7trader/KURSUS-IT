@@ -47,148 +47,77 @@ interface ChatMessage {
     timestamp: Date;
 }
 
-// Konten Kuliah untuk Rendy (Data Analyst) - Expanded
-const lectureContentAnalyst = {
-    title: 'Dasar-dasar SQL: Menguasai SELECT Query',
-    sections: [
-        {
-            heading: 'Kurikulum Pembelajaran',
-            content: 'Selamat datang di Level 1! Di sini kamu akan belajar fondasi utama SQL yang akan kamu gunakan di 80% pekerjaanmu sebagai Data Analyst.\n\nFokus kita hari ini:\n1. Mengambil data (SELECT)\n2. Memfilter data (WHERE)\n3. Mengurutkan data (ORDER BY)\n4. Membatasi hasil (LIMIT)\n5. Menggabungkan data (JOIN)\n\nMari kita bedah satu per satu.',
-        },
-        {
-            heading: '1. Mengambil Data (The Art of SELECT)',
-            content: 'SELECT adalah senjata utamamu. Tapi ingat, jangan pernah pakai `SELECT *` di production kecuali kamu mau dimarahin DBA (Database Administrator).\n\nKenapa?\n- Boros bandwidth\n- Bikin query lambat\n- Susah dibaca\n\nSelalu sebutkan kolom yang kamu butuhkan secara spesifik.',
-            code: `-- JANGAN lakukan ini:
-SELECT * FROM orders;
-
--- LAKUKAN ini:
-SELECT order_id, customer_id, order_date, total_amount
-FROM orders;`,
-        },
-        {
-            heading: '2. Memfilter Data dengan Presisi (WHERE)',
-            content: 'Data di dunia nyata itu kotor dan banyak. Kamu butuh filter untuk mendapatkan insight yang relevan.\n\nOperator penting:\n- `=` (sama dengan)\n- `<>` atau `!=` (tidak sama dengan)\n- `>` (lebih besar), `<` (lebih kecil)\n- `IN` (cocokkan dengan list)\n- `LIKE` (pencarian pola teks)\n- `IS NULL` (cek data kosong)',
-            code: `-- Contoh: Cari customer dari Jakarta yang belanja > 1jt
-SELECT customer_name, email
-FROM customers
-WHERE city = 'Jakarta' 
-  AND total_spend > 1000000;
-
--- Contoh: Cari email gmail
-SELECT email FROM customers WHERE email LIKE '%@gmail.com';`,
-        },
-        {
-            heading: '3. Mengurutkan Data (ORDER BY)',
-            content: 'Data yang tidak urut itu membingungkan. Gunakan ORDER BY untuk menyusun cerita datamu.\n\n- `ASC` = Ascending (A-Z, 0-9)\n- `DESC` = Descending (Z-A, 9-0)',
-            code: `-- Urutkan dari belanja terbesar ke terkecil
-SELECT customer_name, total_spend
-FROM customers
-ORDER BY total_spend DESC;
-
--- Urutkan berdasarkan kota, lalu nama
-SELECT city, customer_name
-FROM customers
-ORDER BY city ASC, customer_name ASC;`,
-        },
-        {
-            heading: '4. Membatasi Hasil (LIMIT)',
-            content: 'Saat eksplorasi data, jangan tarik 1 juta baris. Cukup intip 5-10 baris teratas dulu untuk paham struktur datanya.',
-            code: `SELECT * FROM big_table LIMIT 10;`,
-        },
-        {
-            heading: '5. Menggabungkan Tabel (JOIN)',
-            content: 'Ini adalah "Super Power" SQL. Data jarang ada di satu tabel saja. Biasanya terpecah di tabel `users`, `orders`, `products`, dll.\n\nJenis JOIN utama:\n- `INNER JOIN`: Hanya data yang ada di KEDUA tabel (Irisan)\n- `LEFT JOIN`: Semua data tabel KIRI + data tabel KANAN yang cocok (jika ada)',
-            code: `-- Gabungkan tabel customers dan orders
-SELECT c.customer_name, o.order_date, o.amount
-FROM customers c
+// Data Kurikulum Lengkap
+const curricula: any = {
+    'level-1': {
+        analyst: {
+            title: 'Dasar-dasar SQL: Menguasai SELECT Query',
+            sections: [
+                {
+                    heading: 'Kurikulum Pembelajaran',
+                    content: 'Selamat datang di Level 1! Di sini kamu akan belajar fondasi utama SQL.\n\nFokus kita hari ini:\n1. Mengambil data (SELECT)\n2. Memfilter data (WHERE)\n3. Mengurutkan data (ORDER BY)\n4. Membatasi hasil (LIMIT)\n5. Menggabungkan data (JOIN)',
+                },
+                {
+                    heading: '1. Mengambil Data (The Art of SELECT)',
+                    content: 'SELECT adalah senjata utamamu. Jangan pakai `SELECT *` di production.\n\nKenapa?\n- Boros bandwidth\n- Bikin query lambat\n- Susah dibaca',
+                    code: 'SELECT order_id, order_date FROM orders;',
+                },
+                {
+                    heading: '2. Memfilter Data (WHERE)',
+                    content: 'Gunakan WHERE untuk filter data yang relevan.',
+                    code: "SELECT * FROM customers WHERE city = 'Jakarta';",
+                },
+                {
+                    heading: '3. Menggabungkan Tabel (JOIN)',
+                    content: 'INNER JOIN hanya mengambil data yang ada di kedua tabel.',
+                    code: `SELECT c.name, o.amount 
+FROM customers c 
 JOIN orders o ON c.id = o.customer_id;`,
-        },
-        {
-            heading: 'Studi Kasus Bisnis: RFM Analysis',
-            content: 'Sebagai analis, kamu sering diminta membuat segmentasi customer. Salah satu metodenya adalah RFM (Recency, Frequency, Monetary).\n\nUntuk mendapatkan data Monetary (Total Uang), kita butuh agregasi:',
-            code: `SELECT 
-    customer_name, 
-    SUM(amount) AS total_monetary
-FROM orders
-GROUP BY customer_name
-ORDER BY total_monetary DESC
+                },
+                {
+                    heading: 'Studi Kasus: RFM Analysis',
+                    content: 'Menghitung total belanja customer (Monetary).',
+                    code: `SELECT customer_name, SUM(amount) 
+FROM orders 
+GROUP BY customer_name 
+ORDER BY 2 DESC 
 LIMIT 5;`,
+                },
+            ],
         },
-    ],
-};
-
-// Konten Kuliah untuk Abdul (Data Scientist) - Expanded
-const lectureContentScientist = {
-    title: 'SQL untuk Data Science: Deep Dive',
-    sections: [
-        {
-            heading: 'Kurikulum: Data Retrieval & Manipulation',
-            content: 'Sebagai Data Scientist, SQL bukan sekadar alat ambil data. Ini adalah tahap awal Data Preprocessing.\n\nModul ini mencakup:\n1. Anatomi & Eksekusi Query\n2. Filtering & Indexing Strategy\n3. Sampling Teknik untuk ML\n4. Aggregation & Feature Engineering\n\nKita akan bahas dari sudut pandang efisiensi komputasi.',
+        scientist: {
+            title: 'SQL untuk Data Science: Deep Dive',
+            sections: [
+                {
+                    heading: 'Kurikulum: Data Retrieval',
+                    content: 'Modul ini mencakup:\n1. Anatomi & Eksekusi Query\n2. Filtering & Indexing\n3. Sampling untuk ML',
+                },
+                {
+                    heading: '1. Anatomi & Eksekusi Query',
+                    content: 'Urutan eksekusi: FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY.',
+                    code: `SELECT category, AVG(price)
+FROM products
+WHERE stock > 0
+GROUP BY category;`,
+                },
+                {
+                    heading: '2. Optimization (Big O)',
+                    content: 'Index Scan O(log n) vs Full Table Scan O(n). Selalu cek kolom di WHERE clause.',
+                },
+                {
+                    heading: '3. Sampling Data',
+                    content: 'Ambil sampel acak untuk training model cepat.',
+                    code: 'SELECT * FROM data ORDER BY RANDOM() LIMIT 1000;',
+                },
+            ],
         },
-        {
-            heading: '1. Anatomi & Eksekusi Query',
-            content: 'SQL adalah bahasa deklaratif. Kamu bilang "APA" yang kamu mau, database engine yang mikir "BAGAIMANA" caranya.\n\nUrutan Eksekusi Logis (PENTING!):\n1. `FROM` & `JOIN` (Ambil tabel)\n2. `WHERE` (Filter baris awal)\n3. `GROUP BY` (Kelompokkan)\n4. `HAVING` (Filter hasil grup)\n5. `SELECT` (Pilih kolom)\n6. `ORDER BY` (Urutkan)\n7. `LIMIT` (Potong hasil)',
-            code: `-- Engine tidak membaca dari atas ke bawah!
-SELECT category, AVG(price) -- 5. SELECT
-FROM products               -- 1. FROM
-WHERE stock > 0             -- 2. WHERE
-GROUP BY category           -- 3. GROUP BY
-HAVING AVG(price) > 50000   -- 4. HAVING
-ORDER BY AVG(price) DESC;   -- 6. ORDER BY`,
-        },
-        {
-            heading: '2. Filtering & Indexing (Optimasi O(log n))',
-            content: 'Saat kamu memfilter data dengan `WHERE`, database engine punya dua pilihan:\n1. **Full Table Scan (O(n))**: Baca baris satu-satu. Lambat.\n2. **Index Scan (O(log n))**: Loncat langsung ke data pakai struktur B-Tree.\n\nPastikan kolom yang sering kamu filter (seperti `date`, `user_id`, `status`) memiliki index.',
-        },
-        {
-            heading: '3. Data Sampling untuk Machine Learning',
-            content: 'Training model dengan 1 TERA byte data mungkin overkill dan mahal. Kadang kamu cukup butuh sampel acak yang representatif.\n\nSalah satu teknik sampling sederhana:',
-            code: `-- Ambil 10% sampel acak (PostgreSQL/SQLite)
-SELECT * FROM large_dataset
-ORDER BY RANDOM()
-LIMIT (SELECT count(*) * 0.1 FROM large_dataset);`,
-        },
-        {
-            heading: '4. Feature Engineering: Window Functions',
-            content: 'Window functions adalah game-changer untuk time-series data atau sequential data. Dia memungkinkan kalkulasi antar-baris tanpa `GROUP BY` yang merusak detail baris.\n\nContoh: Menghitung Moving Average.',
-            code: `-- Moving Average 3 hari terakhir
-SELECT 
-    date,
-    sales,
-    AVG(sales) OVER (
-        ORDER BY date 
-        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
-    ) as moving_avg_3d
-FROM daily_sales;`,
-        },
-        {
-            heading: '5. Handling NULL Values (Data Cleaning)',
-            content: 'NULL di SQL itu unik. `NULL != NULL`. NULL artinya "tidak diketahui".\n\nUntuk cleaning data ML, kamu sering perlu imputasi (isi data kosong).',
-            code: `-- Imputasi nilai NULL dengan rata-rata (COALESCE)
-SELECT 
-    id, 
-    COALESCE(age, (SELECT AVG(age) FROM users)) as age_clean
-FROM users;`,
-        },
-        {
-            heading: 'Challenge Time: Kompleksitas',
-            content: 'Di challenge nanti, kamu akan diminta menggabungkan data. Pikirkan: Jika kamu melakukan JOIN pada kolom yang tidak di-index, berapa cost komputasinya? O(N*M)? Bisakah kita filter dulu sebelum JOIN untuk mengurangi N dan M?',
-        },
-    ],
-};
-
-// Data tantangan
-const mockChallenge = {
-    title: 'Query Data Customer',
-    description: `Tulis query SQL untuk menemukan 5 customer teratas berdasarkan total nilai order.
-
-Query kamu harus:
+        challenge: {
+            title: 'Query Data Customer',
+            description: `Tulis query SQL untuk menemukan 5 customer teratas berdasarkan total nilai order.
 1. Join tabel customers dan orders
-2. Hitung total nilai order untuk setiap customer
-3. Tampilkan nama customer dan total nilai
-4. Urutkan berdasarkan total nilai (terbesar dulu)
-5. Batasi hasil hanya 5 teratas`,
-    starterCode: `-- Tulis query SQL kamu di sini
+2. Hitung total nilai order
+3. Urutkan descending`,
+            starterCode: `-- Tulis query SQL kamu di sini
 SELECT 
   c.customer_name,
   -- Hitung total nilai order
@@ -196,6 +125,108 @@ FROM customers c
 JOIN orders o ON c.customer_id = o.customer_id
 -- Tambahkan logika di sini
 `,
+            expectedOutput: `Query berhasil dijalankan
+
+┌────────────────────┬──────────────┐
+│ customer_name      │ total_value  │
+├────────────────────┼──────────────┤
+│ Acme Corporation   │ Rp125.450    │
+│ Tech Solutions     │ Rp98.230     │
+│ Global Industries  │ Rp87.100     │
+│ Prime Retail       │ Rp72.890     │
+│ Metro Services     │ Rp65.420     │
+└────────────────────┴──────────────┘
+
+5 rows returned`,
+        },
+    },
+    'level-2': {
+        analyst: {
+            title: 'Level 2: Advanced JOIN & Reporting',
+            sections: [
+                {
+                    heading: 'Kurikulum Level 2',
+                    content: 'Selamat di Level 2! Sekarang kita akan masuk ke teknik reporting yang lebih dalam.\n\nFokus:\n1. LEFT vs RIGHT JOIN\n2. Advanced Aggregation (COUNT, AVG, MIN, MAX)\n3. Filtering Agregasi (HAVING)\n4. Membuat Laporan Bulanan',
+                },
+                {
+                    heading: '1. Jenis-jenis JOIN',
+                    content: '• INNER JOIN: Irisan (Data harus ada di kedua tabel)\n• LEFT JOIN: Semua data di KIRI, data KANAN null jika tidak cocok.\n\nKapan pakai LEFT JOIN? Saat mau lihat customer yang BELUM pernah order.',
+                    code: `SELECT c.name, o.order_id 
+FROM customers c 
+LEFT JOIN orders o ON c.id = o.customer_id
+WHERE o.order_id IS NULL; -- Customer tanpa order`,
+                },
+                {
+                    heading: '2. Menganalis Data dengan GROUP BY',
+                    content: 'GROUP BY mengelompokkan baris yang memiliki nilai sama. Wajib dipakai jika menggunakan fungsi agregasi (SUM, COUNT).',
+                    code: `SELECT city, COUNT(*) as user_count 
+FROM users 
+GROUP BY city;`,
+                },
+                {
+                    heading: '3. Filter Setelah Agregasi (HAVING)',
+                    content: 'WHERE tidak bisa dipakai untuk hasil agregasi. Gunakan HAVING.\n\nSalah: WHERE count(*) > 5\nBenar: HAVING count(*) > 5',
+                    code: `SELECT category, AVG(price) 
+FROM products 
+GROUP BY category 
+HAVING AVG(price) > 100000;`,
+                },
+            ],
+        },
+        scientist: {
+            title: 'Level 2: Data Pipelines & Cleaning',
+            sections: [
+                {
+                    heading: 'Data Pipelines',
+                    content: 'Di level ini kita belajar membangun pipeline data bersih untuk dimakan model ML.',
+                },
+                {
+                    heading: '1. Handling Missing Values',
+                    content: 'Gunakan COALESCE untuk mengisi NULL values secara on-the-fly.',
+                    code: `SELECT id, COALESCE(phone, 'No Phone') FROM users;`,
+                },
+                {
+                    heading: '2. CTE (Common Table Expressions)',
+                    content: 'CTE membuat query kompleks jadi lebih mudah dibaca dibanding subquery bertingkat.',
+                    code: `WITH Sales_CTE AS (
+  SELECT region, SUM(amount) as total
+  FROM sales
+  GROUP BY region
+)
+SELECT * FROM Sales_CTE WHERE total > 1000;`,
+                },
+            ],
+        },
+        challenge: {
+            title: 'Laporan Penjualan Regional',
+            description: `Buat laporan penjualan per kota yang memiliki lebih dari 2 transaksi.
+
+1. Gunakan tabel 'sales' dan 'locations'
+2. Hitung jumlah transaksi per kota
+3. Hanya tampilkan kota dengan transaksi > 2
+4. Urutkan berdasarkan jumlah transaksi`,
+            starterCode: `-- Tulis query di sini
+SELECT 
+  l.city_name, 
+  COUNT(*) as total_transaksi
+FROM sales s
+JOIN locations l ON s.location_id = l.id
+-- Lanjutkan logika GROUP BY dan HAVING
+`,
+            expectedOutput: `Query berhasil dijalankan
+
+┌─────────────┬─────────────────┐
+│ city_name   │ total_transaksi │
+├─────────────┼─────────────────┤
+│ Jakarta     │ 45              │
+│ Surabaya    │ 32              │
+│ Bandung     │ 15              │
+│ Medan       │ 8               │
+└─────────────┴─────────────────┘
+
+4 rows returned`,
+        },
+    },
 };
 
 export default function LessonPage({
@@ -203,18 +234,31 @@ export default function LessonPage({
 }: {
     params: { track: string; levelId: string };
 }) {
-    const { track } = params;
+    const { track, levelId } = params;
     const isAnalyst = track === 'analyst';
     const mentor = isAnalyst ? 'Rendy' : 'Abdul';
-    const lectureContent = isAnalyst ? lectureContentAnalyst : lectureContentScientist;
+
+    // Get dynamic content
+    const currentData = curricula[levelId] || curricula['level-1'];
+    const lectureContent = isAnalyst ? currentData.analyst : currentData.scientist;
+    const challengeData = currentData.challenge;
 
     // State
     const [mode, setMode] = useState<'lecture' | 'practice'>('lecture');
-    const [code, setCode] = useState(mockChallenge.starterCode);
+    const [code, setCode] = useState(challengeData.starterCode);
     const [output, setOutput] = useState<string>('');
     const [isRunning, setIsRunning] = useState(false);
     const [isGrading, setIsGrading] = useState(false);
     const [gradeResult, setGradeResult] = useState<GradeResult | null>(null);
+
+    // Initial code update when level changes
+    useEffect(() => {
+        setCode(challengeData.starterCode);
+        setMode('lecture');
+        setOutput('');
+        setGradeResult(null);
+        setChatMessages([]);
+    }, [levelId, challengeData]);
 
     // Chat state
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
@@ -270,7 +314,7 @@ export default function LessonPage({
         await new Promise((r) => setTimeout(r, 1000));
 
         // Cek apakah code masih default/belum diubah
-        if (code.trim() === mockChallenge.starterCode.trim()) {
+        if (code.trim() === challengeData.starterCode.trim()) {
             setOutput(`Error: SyntaxError at line 6
   
   -- Hitung total nilai order
@@ -280,19 +324,7 @@ Hint: Kamu belum melengkapi query-nya! Silahkan tulis logikanya dulu.`);
             return;
         }
 
-        setOutput(`> Query berhasil dijalankan
-
-┌────────────────────┬──────────────┐
-│ customer_name      │ total_value  │
-├────────────────────┼──────────────┤
-│ Acme Corporation   │ Rp125.450    │
-│ Tech Solutions     │ Rp98.230     │
-│ Global Industries  │ Rp87.100     │
-│ Prime Retail       │ Rp72.890     │
-│ Metro Services     │ Rp65.420     │
-└────────────────────┴──────────────┘
-
-5 baris dalam 0.042 detik`);
+        setOutput(challengeData.expectedOutput || '> Query berhasil dijalankan');
         setIsRunning(false);
     };
 
@@ -377,9 +409,8 @@ Hint: Kamu belum melengkapi query-nya! Silahkan tulis logikanya dulu.`);
                         </div>
                     </motion.div>
 
-                    {/* Sections */}
                     <div className="space-y-6">
-                        {lectureContent.sections.map((section, index) => (
+                        {lectureContent.sections.map((section: any, index: number) => (
                             <motion.div
                                 key={index}
                                 initial={{ opacity: 0, y: 20 }}
@@ -442,8 +473,8 @@ Hint: Kamu belum melengkapi query-nya! Silahkan tulis logikanya dulu.`);
                             <Code2 className="w-5 h-5 text-white" />
                         </div>
                         <div>
-                            <h1 className="text-gray-900 font-semibold">{mockChallenge.title}</h1>
-                            <p className="text-gray-500 text-sm">Tantangan Level 1</p>
+                            <h1 className="text-gray-900 font-semibold">{challengeData.title}</h1>
+                            <p className="text-gray-500 text-sm">Tantangan Level {levelId?.split('-')[1] || '1'}</p>
                         </div>
                     </div>
                     <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${theme.bg}`}>
@@ -500,8 +531,8 @@ Hint: Kamu belum melengkapi query-nya! Silahkan tulis logikanya dulu.`);
                 {/* Editor Column */}
                 <div className="col-span-5 flex flex-col bg-white">
                     <div className={`p-4 border-b border-gray-200 ${theme.bg}`}>
-                        <h3 className="text-gray-900 font-semibold mb-2">{mockChallenge.title}</h3>
-                        <p className="text-gray-600 text-sm whitespace-pre-line">{mockChallenge.description}</p>
+                        <h3 className="text-gray-900 font-semibold mb-2">{challengeData.title}</h3>
+                        <p className="text-gray-600 text-sm whitespace-pre-line">{challengeData.description}</p>
                     </div>
 
                     <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 bg-gray-50">
