@@ -6,7 +6,7 @@ export async function POST(req: Request) {
 
         // Use OpenRouter if available
         if (process.env.OPENROUTER_API_KEY) {
-            console.log("Using OpenRouter for generation...");
+            console.log("🔄 Using OpenRouter for generation...");
             try {
                 const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
                     method: "POST",
@@ -17,57 +17,75 @@ export async function POST(req: Request) {
                         "X-Title": "Data Academy"
                     },
                     body: JSON.stringify({
-                        "model": "meta-llama/llama-3-8b-instruct:free", // Free tier model
+                        "model": "google/gemma-2-9b-it:free", // Switching to more stable free model
                         "messages": [
                             {
-                                "role": "system",
-                                "content": `You are an expert Professor (Dosen). Teach "${topic}" for "${track}" (Level ${level}).
-                                
-                                RULES:
-                                1. Language: INDONESIAN (Bahasa Indonesia).
-                                2. Create 3 Detailed Sections.
-                                3. Output Valid JSON ONLY. Structure: { "sections": [{ "heading": "...", "content": "...", "code": "..." }] }`
-                            },
-                            {
                                 "role": "user",
-                                "content": `Jelaskan materi "${topic}" secara mendalam (Level Universitas).`
+                                "content": `Kamu adalah Dosen Expert. Ajarkan topik "${topic}" untuk track "${track}" (Level ${level}) dalam Bahasa Indonesia.
+
+Format response sebagai JSON dengan struktur ini:
+{
+  "sections": [
+    { "heading": "Teori & Konsep", "content": "Penjelasan mendalam...", "code": "contoh code jika ada" },
+    { "heading": "Implementasi", "content": "Cara praktis...", "code": "code example" },
+    { "heading": "Aplikasi Nyata", "content": "Use case dunia nyata...", "code": "advanced code" }
+  ]
+}
+
+Pastikan output HANYA JSON, tanpa teks tambahan.`
                             }
                         ]
                     })
                 });
 
                 if (!response.ok) {
-                    const err = await response.text();
-                    console.error("OpenRouter API Error:", err);
-                    throw new Error("OpenRouter Failed: " + response.statusText);
+                    const errorText = await response.text();
+                    console.error("❌ OpenRouter Status:", response.status, response.statusText);
+                    console.error("❌ OpenRouter Response:", errorText);
+
+                    // Return detailed error to frontend
+                    return NextResponse.json({
+                        error: `OpenRouter Error (${response.status}): ${errorText.substring(0, 200)}`
+                    }, { status: 500 });
                 }
 
                 const data = await response.json();
+                console.log("✅ OpenRouter Response:", JSON.stringify(data).substring(0, 100));
+
                 if (data.choices && data.choices[0]) {
                     const content = data.choices[0].message.content;
                     // Extract JSON
                     const jsonMatch = content.match(/\{[\s\S]*\}/);
                     if (jsonMatch) {
-                        return NextResponse.json(JSON.parse(jsonMatch[0]));
+                        const parsed = JSON.parse(jsonMatch[0]);
+                        console.log("✅ JSON Parsed Successfully");
+                        return NextResponse.json(parsed);
                     } else {
+                        console.warn("⚠️ No JSON found, returning raw content");
                         // Fallback if AI fails to output JSON
                         return NextResponse.json({
                             sections: [
-                                { heading: "Penjelasan", content: content, code: "" }
+                                { heading: "Materi", content: content, code: "" }
                             ]
                         });
                     }
+                } else {
+                    return NextResponse.json({
+                        error: "Invalid OpenRouter response structure"
+                    }, { status: 500 });
                 }
-            } catch (e) {
-                console.error("OpenRouter Error", e);
-                return NextResponse.json({ error: "OpenRouter Failed" }, { status: 500 });
+            } catch (e: any) {
+                console.error("❌ OpenRouter Exception:", e.message);
+                return NextResponse.json({
+                    error: `OpenRouter Failed: ${e.message}`
+                }, { status: 500 });
             }
         }
 
-        return NextResponse.json({ error: "No API Key" }, { status: 500 });
+        return NextResponse.json({ error: "No OPENROUTER_API_KEY found in environment" }, { status: 500 });
 
-    } catch (error) {
-        console.error("AI Gen Error:", error);
-        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    } catch (error: any) {
+        console.error("❌ AI Gen Error:", error);
+        return NextResponse.json({ error: `Server Error: ${error.message}` }, { status: 500 });
     }
 }
