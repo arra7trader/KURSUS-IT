@@ -130,37 +130,80 @@ export default function LessonPage({
         setIsRunning(true);
         setOutput('Menjalankan query...\n');
 
-        await new Promise((r) => setTimeout(r, 1000));
+        await new Promise((r) => setTimeout(r, 800)); // Simulate processing
 
-        // Cek apakah code masih default/belum diubah
-        if (code.trim() === challengeData.starterCode.trim()) {
-            setOutput(`Error: SyntaxError at line 6
-  
-  -- Hitung total nilai order
-  ^
-Hint: Kamu belum melengkapi query-nya! Silahkan tulis logikanya dulu.`);
+        // 1. Basic Validation (Empty or Default)
+        if (code.trim() === challengeData.starterCode.trim() || !code.trim()) {
+            setOutput(`Error: Query masih kosong atau belum diubah.\nHint: Lengkapi query sesuai instruksi!`);
             setIsRunning(false);
             return;
         }
 
+        // 2. Keyword Validation (Client-side)
+        if (challengeData.validation) {
+            const upperCode = code.toUpperCase();
+            const missingKeywords = challengeData.validation.requiredKeywords.filter((k: string) => !upperCode.includes(k));
+
+            if (missingKeywords.length > 0) {
+                setOutput(`Error: Syntax Error.\n\nQuery kamu sepertinya kurang lengkap.\nKeyword yang hilang: ${missingKeywords.join(', ')}\n\nCoba cek lagi logika SQL-nya!`);
+                setIsRunning(false);
+                return;
+            }
+
+            const forbidden = challengeData.validation.forbiddenKeywords.filter((k: string) => upperCode.includes(k));
+            if (forbidden.length > 0) {
+                setOutput(`Error: Security Alert.\n\nKamu menggunakan keyword terlarang: ${forbidden.join(', ')}`);
+                setIsRunning(false);
+                return;
+            }
+        }
+
+        // 3. Success (Mock Execution Result)
+        // In the future, this would send to a real SQL sandbox.
+        // For now, if keywords pass, we assume 'Valid Syntax' enough to show result.
         setOutput(challengeData.expectedOutput || '> Query berhasil dijalankan');
         setIsRunning(false);
     };
 
-    // Submit
+    // Submit ke AI Grader
     const handleSubmit = async () => {
         setIsGrading(true);
         setGradeResult(null);
-        await new Promise((r) => setTimeout(r, 2500));
-        setGradeResult({
-            score: 85,
-            criteria: { correctness: 36, efficiency: 22, style: 13, business_insight: 14 },
-            feedback_text: "Kerja bagus! Query kamu berhasil mengidentifikasi 5 customer teratas. Logika JOIN dan agregasinya sudah benar.",
-            strengths: ["JOIN sudah benar", "GROUP BY tepat", "ORDER BY dan LIMIT bagus"],
-            improvements: ["Tambah alias untuk SUM()", "Filter order yang batal", "Konsisten pakai alias tabel"],
-            passed: true,
-        });
-        setIsGrading(false);
+
+        try {
+            const response = await fetch('/api/grade/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    code,
+                    challengeTitle: challengeData.title,
+                    challengeDescription: challengeData.description,
+                    language: 'sql',
+                    difficulty: 1,
+                    passingScore: 70
+                })
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err.error || 'Gagal menilai code');
+            }
+
+            const result: GradeResult = await response.json();
+            setGradeResult(result);
+
+            // Auto-scroll to result
+            setTimeout(() => {
+                const element = document.getElementById('grade-result');
+                element?.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+
+        } catch (error: any) {
+            console.error(error);
+            alert('Terjadi kesalahan saat menilai: ' + error.message);
+        } finally {
+            setIsGrading(false);
+        }
     };
 
     // Chat

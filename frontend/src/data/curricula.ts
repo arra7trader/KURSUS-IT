@@ -89,6 +89,11 @@ JOIN orders o ON c.customer_id = o.customer_id
 └────────────────────┴──────────────┘
 
 5 rows returned`,
+            validation: {
+                requiredKeywords: ['SELECT', 'FROM', 'JOIN', 'ON', 'SUM', 'GROUP BY', 'ORDER BY', 'DESC'],
+                forbiddenKeywords: ['DELETE', 'DROP', 'UPDATE', 'INSERT'],
+                minLines: 4
+            }
         },
     },
     'level-2': {
@@ -312,7 +317,12 @@ topics.forEach((topic, index) => {
             title: `Tantangan ${topic}`,
             description: `Implementasikan solusi menggunakan konsep ${topic} yang telah dipelajari.\n\n1. Analisis masalah\n2. Tulis query ${topic}\n3. Validasi hasil`,
             starterCode: `-- Tulis implementasi ${topic} anda\nSELECT 'Jawaban saya';`,
-            expectedOutput: `Konsep ${topic} berhasil diimplementasikan!`
+            expectedOutput: `Konsep ${topic} berhasil diimplementasikan!`,
+            validation: {
+                requiredKeywords: ['SELECT'],
+                forbiddenKeywords: ['DROP', 'DELETE', 'TRUNCATE'],
+                minLines: 1
+            }
         }
     };
 });
