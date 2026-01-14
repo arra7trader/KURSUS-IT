@@ -46,6 +46,7 @@ export const users = sqliteTable('users', {
     image: text('image'),
     currentPath: text('current_path'), // 'ANALYST' or 'SCIENTIST'
     currentLevel: text('current_level'), // e.g. 'level-1', 'level-5'
+    completedLevels: text('completed_levels'), // JSON array: ["level-1", "level-2"]
     createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`CURRENT_TIMESTAMP`),
     updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`CURRENT_TIMESTAMP`),
 });

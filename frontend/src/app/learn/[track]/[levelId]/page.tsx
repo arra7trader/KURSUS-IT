@@ -250,7 +250,11 @@ export default function LessonPage({
                 fetch('/api/user/progress', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ levelId, track })
+                    body: JSON.stringify({
+                        levelId,
+                        track,
+                        completed: true // Mark this level as completed
+                    })
                 }).catch(console.error);
             }
 
