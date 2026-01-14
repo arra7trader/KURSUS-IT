@@ -266,7 +266,20 @@ export default function LessonPage({
     const handleRunCode = async () => {
         setIsRunning(true);
         setOutput('Menjalankan query...\n');
-        await new Promise((r) => setTimeout(r, 1500));
+
+        await new Promise((r) => setTimeout(r, 1000));
+
+        // Cek apakah code masih default/belum diubah
+        if (code.trim() === mockChallenge.starterCode.trim()) {
+            setOutput(`Error: SyntaxError at line 6
+  
+  -- Hitung total nilai order
+  ^
+Hint: Kamu belum melengkapi query-nya! Silahkan tulis logikanya dulu.`);
+            setIsRunning(false);
+            return;
+        }
+
         setOutput(`> Query berhasil dijalankan
 
 ┌────────────────────┬──────────────┐
@@ -519,13 +532,36 @@ export default function LessonPage({
                     </div>
 
                     <div className="flex-1 p-4 font-mono text-sm overflow-auto bg-gray-900">
-                        {output ? <pre className="text-green-400 whitespace-pre-wrap">{output}</pre> : <p className="text-gray-500">Jalankan code untuk lihat output...</p>}
+                        {output ? <pre className="text-green-400 whitespace-pre-wrap">{output}</pre> : (
+                            <div className="h-full flex flex-col items-center justify-center text-gray-500 gap-2">
+                                <Terminal className="w-8 h-8 opacity-50" />
+                                <p>Klik "Jalankan" untuk melihat hasil</p>
+                            </div>
+                        )}
                     </div>
 
-                    <div className="border-t border-gray-200 p-4">
-                        <button onClick={handleSubmit} disabled={isGrading} className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl ${theme.button} text-white font-semibold`}>
-                            {isGrading ? <><Loader2 className="w-5 h-5 animate-spin" />Menilai...</> : <><Zap className="w-5 h-5" />Submit untuk Dinilai</>}
+                    <div className="border-t border-gray-200 p-4 space-y-3">
+                        <button onClick={handleSubmit} disabled={isGrading} className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl ${theme.button} text-white font-semibold shadow-lg hover:bg-opacity-90 transition-all disabled:opacity-50`}>
+                            {isGrading ? <><Loader2 className="w-5 h-5 animate-spin" />Menilai...</> : <><Zap className="w-5 h-5" />Submit untuk Dinilai AI</>}
                         </button>
+
+                        {/* Next Level Button (Only if passed) */}
+                        <AnimatePresence>
+                            {gradeResult?.passed && (
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: 'auto', opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                >
+                                    <Link
+                                        href={`/learn/${track}/level-2`}
+                                        className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-green-500 hover:bg-green-600 text-white font-semibold shadow-lg transition-all"
+                                    >
+                                        Lanjut ke Level Berikutnya <ArrowRight className="w-5 h-5" />
+                                    </Link>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
 
                     {/* Grade Result */}
