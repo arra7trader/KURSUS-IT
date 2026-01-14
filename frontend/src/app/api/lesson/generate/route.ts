@@ -1,12 +1,29 @@
 import { NextResponse } from "next/server";
 
+// List of free models to try in order of preference
+const FREE_MODELS = [
+    "meta/llama-3-3-70b-instruct:free",      // Meta Llama 3.3 70B
+    "google/gemma-3-27b:free",                // Google Gemma 3 27B
+    "mistral/devstral-2-2512:free",          // Mistral Devstral
+    "deepseek/r1-0528:free",                 // DeepSeek R1
+];
+
 export async function POST(req: Request) {
     try {
         const { topic, track, level } = await req.json();
 
-        // Use OpenRouter if available
-        if (process.env.OPENROUTER_API_KEY) {
-            console.log("🔄 Using OpenRouter for generation...");
+        if (!process.env.OPENROUTER_API_KEY) {
+            return NextResponse.json({
+                error: "No OPENROUTER_API_KEY found in environment"
+            }, { status: 500 });
+        }
+
+        // Try each model until one works
+        let lastError = "";
+
+        for (const modelId of FREE_MODELS) {
+            console.log(`🔄 Trying model: ${modelId}`);
+
             try {
                 const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
                     method: "POST",
@@ -17,7 +34,7 @@ export async function POST(req: Request) {
                         "X-Title": "Data Academy"
                     },
                     body: JSON.stringify({
-                        "model": "google/gemma-2-9b-it:free", // Switching to more stable free model
+                        "model": modelId,
                         "messages": [
                             {
                                 "role": "user",
@@ -40,17 +57,13 @@ Pastikan output HANYA JSON, tanpa teks tambahan.`
 
                 if (!response.ok) {
                     const errorText = await response.text();
-                    console.error("❌ OpenRouter Status:", response.status, response.statusText);
-                    console.error("❌ OpenRouter Response:", errorText);
-
-                    // Return detailed error to frontend
-                    return NextResponse.json({
-                        error: `OpenRouter Error (${response.status}): ${errorText.substring(0, 200)}`
-                    }, { status: 500 });
+                    console.warn(`⚠️ Model ${modelId} failed:`, response.status, errorText);
+                    lastError = `${modelId}: ${errorText.substring(0, 100)}`;
+                    continue; // Try next model
                 }
 
                 const data = await response.json();
-                console.log("✅ OpenRouter Response:", JSON.stringify(data).substring(0, 100));
+                console.log(`✅ Model ${modelId} succeeded!`);
 
                 if (data.choices && data.choices[0]) {
                     const content = data.choices[0].message.content;
@@ -62,30 +75,37 @@ Pastikan output HANYA JSON, tanpa teks tambahan.`
                         return NextResponse.json(parsed);
                     } else {
                         console.warn("⚠️ No JSON found, returning raw content");
-                        // Fallback if AI fails to output JSON
                         return NextResponse.json({
                             sections: [
-                                { heading: "Materi", content: content, code: "" }
+                                {
+                                    heading: "Materi",
+                                    content: content,
+                                    code: ""
+                                }
                             ]
                         });
                     }
                 } else {
-                    return NextResponse.json({
-                        error: "Invalid OpenRouter response structure"
-                    }, { status: 500 });
+                    console.warn(`⚠️ Invalid response structure from ${modelId}`);
+                    lastError = `${modelId}: Invalid response structure`;
+                    continue;
                 }
             } catch (e: any) {
-                console.error("❌ OpenRouter Exception:", e.message);
-                return NextResponse.json({
-                    error: `OpenRouter Failed: ${e.message}`
-                }, { status: 500 });
+                console.error(`❌ Exception with model ${modelId}:`, e.message);
+                lastError = `${modelId}: ${e.message}`;
+                continue;
             }
         }
 
-        return NextResponse.json({ error: "No OPENROUTER_API_KEY found in environment" }, { status: 500 });
+        // If all models failed
+        return NextResponse.json({
+            error: `All models failed. Last error: ${lastError}`
+        }, { status: 500 });
 
     } catch (error: any) {
         console.error("❌ AI Gen Error:", error);
-        return NextResponse.json({ error: `Server Error: ${error.message}` }, { status: 500 });
+        return NextResponse.json({
+            error: `Server Error: ${error.message}`
+        }, { status: 500 });
     }
 }
