@@ -29,18 +29,39 @@ export async function POST(req: Request) {
                     "messages": [
                         {
                             "role": "user",
-                            "content": `Kamu adalah Dosen Expert. Ajarkan topik "${topic}" untuk track "${track}" (Level ${level}) dalam Bahasa Indonesia.
+                            "content": `Kamu adalah Dosen Expert yang mengajar dengan gaya santai tapi profesional. Ajarkan topik "${topic}" untuk track "${track}" (Level ${level}).
 
-Format response sebagai JSON dengan struktur ini:
+ATURAN PENULISAN:
+1. Gunakan Bahasa Indonesia sehari-hari yang natural dan enak dibaca
+2. Buat penjelasan dengan analogi atau contoh kehidupan nyata
+3. Hindari bahasa formal yang kaku - tulis seperti sedang ngobrol dengan mahasiswa
+4. Gunakan emoji sesekali untuk membuat lebih engaging (📊, 💡, ⚡, dll)
+5. Buat paragraf pendek (2-3 kalimat) agar mudah dibaca
+6. Sertakan code example yang lengkap dan ada komentar penjelasannya
+7. Struktur: Teori → Implementasi → Aplikasi Nyata
+
+Format response HANYA JSON (tanpa teks lain):
 {
   "sections": [
-    { "heading": "Teori & Konsep", "content": "Penjelasan mendalam...", "code": "contoh code jika ada" },
-    { "heading": "Implementasi", "content": "Cara praktis...", "code": "code example" },
-    { "heading": "Aplikasi Nyata", "content": "Use case dunia nyata...", "code": "advanced code" }
+    { 
+      "heading": "🎯 Konsep Dasar", 
+      "content": "Penjelasan teori dengan analogi mudah dipahami. Jelaskan 'kenapa' konsep ini penting dan 'gimana' cara kerjanya. Gunakan bahasa santai.", 
+      "code": "-- Code example dengan komentar\nSELECT * FROM table; -- Penjelasan singkat" 
+    },
+    { 
+      "heading": "💻 Implementasi Praktis", 
+      "content": "Panduan step-by-step cara pakai. Kasih tips & tricks yang berguna.", 
+      "code": "-- Code example lengkap dengan best practice" 
+    },
+    { 
+      "heading": "🚀 Studi Kasus Real", 
+      "content": "Aplikasi di dunia nyata dengan skenario bisnis konkret. Jelaskan value-nya untuk pekerjaan.", 
+      "code": "-- Advanced example untuk production" 
+    }
   ]
 }
 
-Pastikan output HANYA JSON, tanpa teks tambahan.`
+PENTING: Output HARUS valid JSON, tidak ada markdown atau teks tambahan!`
                         }
                     ]
                 })
