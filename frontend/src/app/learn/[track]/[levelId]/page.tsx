@@ -584,12 +584,18 @@ Hint: Kamu belum melengkapi query-nya! Silahkan tulis logikanya dulu.`);
                                     animate={{ height: 'auto', opacity: 1 }}
                                     exit={{ height: 0, opacity: 0 }}
                                 >
-                                    <Link
-                                        href={`/learn/${track}/level-2`}
-                                        className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-green-500 hover:bg-green-600 text-white font-semibold shadow-lg transition-all"
-                                    >
-                                        Lanjut ke Level Berikutnya <ArrowRight className="w-5 h-5" />
-                                    </Link>
+                                    {curricula[`level-${parseInt(levelId.split('-')[1] || '1') + 1}`] ? (
+                                        <Link
+                                            href={`/learn/${track}/level-${parseInt(levelId.split('-')[1] || '1') + 1}`}
+                                            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-green-500 hover:bg-green-600 text-white font-semibold shadow-lg transition-all"
+                                        >
+                                            Lanjut ke Level {parseInt(levelId.split('-')[1] || '1') + 1} <ArrowRight className="w-5 h-5" />
+                                        </Link>
+                                    ) : (
+                                        <div className="w-full text-center py-3 bg-gray-100 rounded-xl text-gray-500 font-medium">
+                                            🎉 Kamu telah menyelesaikan semua materi saat ini!
+                                        </div>
+                                    )}
                                 </motion.div>
                             )}
                         </AnimatePresence>
