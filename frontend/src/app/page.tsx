@@ -17,12 +17,19 @@ import {
     Cpu
 } from 'lucide-react';
 
+import { useSession } from 'next-auth/react';
+
 export default function LandingPage() {
     const router = useRouter();
+    const { data: session } = useSession();
     const [hoveredSide, setHoveredSide] = useState<'analyst' | 'scientist' | null>(null);
 
     const selectPath = (path: 'analyst' | 'scientist') => {
-        router.push(`/learn/${path}/level-1`);
+        if (session) {
+            router.push('/learn');
+        } else {
+            router.push(`/login?callbackUrl=/learn`);
+        }
     };
 
     return (
@@ -40,9 +47,16 @@ export default function LandingPage() {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <Link href="/login" className="px-5 py-2.5 rounded-xl bg-gray-900 text-white font-semibold hover:bg-gray-800 transition-all shadow-lg hover:shadow-xl">
-                            Masuk
-                        </Link>
+                        {session ? (
+                            <Link href="/learn" className="px-5 py-2.5 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl flex items-center gap-2">
+                                <span className="hidden sm:inline">Halo, {session.user?.name?.split(' ')[0]}</span>
+                                <span className="bg-white/20 px-2 py-0.5 rounded text-sm">Dashboard</span>
+                            </Link>
+                        ) : (
+                            <Link href="/login" className="px-5 py-2.5 rounded-xl bg-gray-900 text-white font-semibold hover:bg-gray-800 transition-all shadow-lg hover:shadow-xl">
+                                Masuk
+                            </Link>
+                        )}
                     </div>
                 </nav>
             </header>

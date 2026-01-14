@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { Providers } from '@/components/providers'
 
 export const metadata: Metadata = {
     title: 'Data Academy | AI-Powered Learning for Data Professionals',
@@ -21,7 +22,9 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className="min-h-screen bg-gray-950">
-                {children}
+                <Providers>
+                    {children}
+                </Providers>
             </body>
         </html>
     )
