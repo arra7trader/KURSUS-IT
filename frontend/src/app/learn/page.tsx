@@ -4,11 +4,18 @@ import { db } from "@/db";
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
-export default async function LearnRedirectPage() {
+export default async function LearnRedirectPage({ searchParams }: { searchParams: { track?: string } }) {
     const session = await auth();
 
     if (!session?.user?.email) {
         redirect("/login");
+    }
+
+    // If track is specified in URL (from login redirect), update it
+    if (searchParams?.track) {
+        await db.update(users)
+            .set({ currentPath: searchParams.track.toUpperCase() })
+            .where(eq(users.email, session.user.email));
     }
 
     const user = await db.select().from(users).where(eq(users.email, session.user.email)).limit(1);

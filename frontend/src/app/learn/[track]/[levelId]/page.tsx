@@ -257,10 +257,18 @@ export default function LessonPage({
                                 <theme.icon className="w-5 h-5 text-white" />
                             </div>
                             <div>
-                                <h1 className="text-gray-900 font-semibold">Level 1: Dasar-dasar SQL</h1>
+                                <h1 className="text-gray-900 font-semibold">{lectureContent.title}</h1>
                                 <p className="text-gray-500 text-sm">Mentor: {mentor}</p>
                             </div>
                         </div>
+
+                        {/* Track Switcher */}
+                        <Link
+                            href={`/learn/${isAnalyst ? 'scientist' : 'analyst'}/${levelId}`}
+                            className={`px-4 py-2 rounded-lg border ${theme.border} ${theme.text} text-sm font-medium hover:bg-gray-50 transition-colors`}
+                        >
+                            Switch to {isAnalyst ? 'Data Scientist' : 'Data Analyst'}
+                        </Link>
                     </div>
                 </header>
 
@@ -355,9 +363,17 @@ export default function LessonPage({
                             <p className="text-gray-500 text-sm">Tantangan Level {levelId?.split('-')[1] || '1'}</p>
                         </div>
                     </div>
-                    <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${theme.bg}`}>
-                        <div className={`w-2 h-2 rounded-full ${theme.bgDark}`} />
-                        <span className={`text-sm ${theme.text}`}>Mentor: {mentor}</span>
+                    <div className="flex items-center gap-4">
+                        <Link
+                            href={`/learn/${isAnalyst ? 'scientist' : 'analyst'}/${levelId}`}
+                            className={`px-3 py-1.5 rounded-lg border ${theme.border} ${theme.text} text-xs font-medium hover:bg-gray-50 transition-colors`}
+                        >
+                            Switch Branch
+                        </Link>
+                        <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${theme.bg}`}>
+                            <div className={`w-2 h-2 rounded-full ${theme.bgDark}`} />
+                            <span className={`text-sm ${theme.text}`}>Mentor: {mentor}</span>
+                        </div>
                     </div>
                 </div>
             </header>

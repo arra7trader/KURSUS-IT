@@ -24,11 +24,22 @@ export default function LandingPage() {
     const { data: session } = useSession();
     const [hoveredSide, setHoveredSide] = useState<'analyst' | 'scientist' | null>(null);
 
-    const selectPath = (path: 'analyst' | 'scientist') => {
+    const selectPath = async (path: 'analyst' | 'scientist') => {
         if (session) {
+            // Update track preference in DB
+            try {
+                await fetch('/api/user/progress', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ track: path })
+                });
+            } catch (e) {
+                console.error("Failed to update track", e);
+            }
             router.push('/learn');
         } else {
-            router.push(`/login?callbackUrl=/learn`);
+            // Pass track preference for post-login handling
+            router.push(`/login?callbackUrl=/learn?track=${path}`);
         }
     };
 

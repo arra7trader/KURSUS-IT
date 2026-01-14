@@ -13,17 +13,18 @@ export async function POST(req: Request) {
 
         const { levelId, track } = await req.json();
 
-        if (!levelId || !track) {
-            return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+        if (!levelId && !track) {
+            return NextResponse.json({ error: "Missing fields to update" }, { status: 400 });
         }
+
+        // Build update object
+        const updateData: any = { updatedAt: new Date() };
+        if (levelId) updateData.currentLevel = levelId;
+        if (track) updateData.currentPath = track.toUpperCase();
 
         // Update user progress
         await db.update(users)
-            .set({
-                currentLevel: levelId,
-                currentPath: track.toUpperCase(), // Store as ANALYST/SCIENTIST
-                updatedAt: new Date()
-            })
+            .set(updateData)
             .where(eq(users.email, session.user.email));
 
         return NextResponse.json({ success: true });
