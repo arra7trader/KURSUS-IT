@@ -24,14 +24,18 @@ export default function LoginPage() {
                 redirect: false,
             });
 
+            console.log('Login result:', result);
+
             if (result?.error) {
-                alert('Login failed');
+                alert(`Login gagal: ${result.error}\n\nPastikan email dan nama sudah benar.`);
+                console.error('Login error details:', result);
             } else {
-                router.push('/');
+                router.push('/learn');
                 router.refresh();
             }
         } catch (error) {
             console.error('Login error:', error);
+            alert('Terjadi kesalahan saat login. Coba lagi.');
         } finally {
             setIsLoading(false);
         }
@@ -61,7 +65,7 @@ export default function LoginPage() {
                             required
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
+                            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none text-gray-900"
                             placeholder="Contoh: Budi Santoso"
                         />
                     </div>
@@ -73,7 +77,7 @@ export default function LoginPage() {
                             required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
+                            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none text-gray-900"
                             placeholder="budi@example.com"
                         />
                     </div>
