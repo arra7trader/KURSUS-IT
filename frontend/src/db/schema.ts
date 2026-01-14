@@ -45,6 +45,7 @@ export const users = sqliteTable('users', {
     emailVerified: integer('emailVerified', { mode: 'timestamp_ms' }),
     image: text('image'),
     currentPath: text('current_path'), // 'ANALYST' or 'SCIENTIST'
+    currentLevel: text('current_level'), // e.g. 'level-1', 'level-5'
     createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`CURRENT_TIMESTAMP`),
     updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`CURRENT_TIMESTAMP`),
 });

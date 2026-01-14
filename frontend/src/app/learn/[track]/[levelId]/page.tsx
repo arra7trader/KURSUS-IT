@@ -192,6 +192,15 @@ export default function LessonPage({
             const result: GradeResult = await response.json();
             setGradeResult(result);
 
+            // Save Progress if passed
+            if (result.passed) {
+                fetch('/api/user/progress', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ levelId, track })
+                }).catch(console.error);
+            }
+
             // Auto-scroll to result
             setTimeout(() => {
                 const element = document.getElementById('grade-result');

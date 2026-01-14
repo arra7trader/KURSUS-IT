@@ -67,10 +67,22 @@ export default function LandingPage() {
                         </span>
                     </h1>
 
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-12">
+                    <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
                         Pilih jalur karirmu. Belajar dari AI tutor yang adaptif.
                         Latihan dengan coding challenge nyata. Dapet feedback instan.
                     </p>
+
+                    <motion.div
+                        className="mb-16"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.1 }}
+                    >
+                        <Link href="/learn" className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-lg transition-all shadow-xl shadow-blue-200 hover:shadow-2xl hover:-translate-y-1">
+                            <Play className="w-5 h-5 fill-current" />
+                            Mulai Belajar Sekarang
+                        </Link>
+                    </motion.div>
 
                     {/* Stats */}
                     <div className="flex items-center justify-center gap-12 mb-16">
