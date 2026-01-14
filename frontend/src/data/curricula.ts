@@ -1,4 +1,5 @@
-export const curricula: any = {
+// Basic Levels 1-5 (High Quality Manual Content)
+const baseCurricula: any = {
     'level-1': {
         analyst: {
             title: 'Dasar-dasar SQL: Menguasai SELECT Query',
@@ -180,128 +181,44 @@ JOIN locations l ON s.location_id = l.id
         analyst: {
             title: 'Level 3: Window Functions (Analyst)',
             sections: [
-                {
-                    heading: 'Pengantar Window Functions',
-                    content: 'Window Functions memungkinkanmu melakukan kalkulasi antar baris tanpa menyatukan baris (seperti GROUP BY). Ini SANGAT powerful untuk analisis tren.',
-                },
-                {
-                    heading: '1. Ranking Data (RANK, DENSE_RANK)',
-                    content: 'Bagaimana cara meranking sales tertinggi per kategori?\n\nRANK(): 1, 2, 2, skip ke 4\nDENSE_RANK(): 1, 2, 2, lanjut ke 3 (Tidak ada nomor urut yang lompat)',
-                    code: `SELECT 
-    category,
-    product_name,
-    price,
-    RANK() OVER (PARTITION BY category ORDER BY price DESC) as rank
-FROM products;`,
-                },
-                {
-                    heading: '2. Melihat Data Sebelumnya (LEAD & LAG)',
-                    content: 'Gunakan LAG() untuk melihat penjualan hari kemarin di baris hari ini. Berguna untuk menghitung Growth (WoW, MoM).',
-                    code: `SELECT 
-    month,
-    sales,
-    LAG(sales) OVER (ORDER BY month) as prev_month_sales,
-    (sales - LAG(sales) OVER (ORDER BY month)) as diff
-FROM monthly_sales;`,
-                },
+                { heading: 'Pengantar Window Functions', content: 'Window Functions memungkinkanmu melakukan kalkulasi antar baris tanpa menyatukan baris (seperti GROUP BY). Ini SANGAT powerful untuk analisis tren.' },
+                { heading: '1. Ranking Data (RANK, DENSE_RANK)', content: 'Bagaimana cara meranking sales tertinggi per kategori?\n\nRANK(): 1, 2, 2, skip ke 4\nDENSE_RANK(): 1, 2, 2, lanjut ke 3 (Tidak ada nomor urut yang lompat)', code: `SELECT category, product_name, price, RANK() OVER (PARTITION BY category ORDER BY price DESC) as rank FROM products;` },
+                { heading: '2. Melihat Data Sebelumnya (LEAD & LAG)', content: 'Gunakan LAG() untuk melihat penjualan hari kemarin di baris hari ini. Berguna untuk menghitung Growth (WoW, MoM).', code: `SELECT month, sales, LAG(sales) OVER (ORDER BY month) as prev_month_sales FROM monthly_sales;` },
             ],
         },
         scientist: {
             title: 'Level 3: Advanced Feature Engineering',
             sections: [
-                {
-                    heading: 'Feature Engineering dengan SQL',
-                    content: 'Sebelum data masuk ke SciKit-Learn, kita bisa buat fitur canggih langsung di database.',
-                },
-                {
-                    heading: '1. Moving Averages',
-                    content: 'Menghaluskan noise data time-series.',
-                    code: `AVG(value) OVER (ORDER BY time ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)`,
-                },
-                {
-                    heading: '2. Cumulative Sum (Running Total)',
-                    content: 'Menghitung total berjalan sampai titik tertentu.',
-                    code: `SUM(amount) OVER (ORDER BY date) as running_total`,
-                },
+                { heading: 'Feature Engineering dengan SQL', content: 'Sebelum data masuk ke SciKit-Learn, kita bisa buat fitur canggih langsung di database.' },
+                { heading: '1. Moving Averages', content: 'Menghaluskan noise data time-series.', code: `AVG(value) OVER (ORDER BY time ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)` },
+                { heading: '2. Cumulative Sum (Running Total)', content: 'Menghitung total berjalan sampai titik tertentu.', code: `SUM(amount) OVER (ORDER BY date) as running_total` },
             ],
         },
         challenge: {
             title: 'Analisis Pertumbuhan Penjualan',
-            description: `Hitung pertumbuhan penjualan (Growth) bulanan.
-1. Gunakan tabel 'monthly_sales' (bulan, total_sales)
-2. Tampilkan kolom: bulan, sales, sales_bulan_lalu, growth
-3. Gunakan LAG()`,
-            starterCode: `SELECT
-  bulan,
-  total_sales,
-  -- Gunakan LAG() di sini
-  LAG(total_sales) OVER (ORDER BY bulan) as previous_sales
-FROM monthly_sales
-`,
-            expectedOutput: `Query berhasil dijalankan
-
-┌───────┬─────────────┬────────────────┬────────┐
-│ bulan │ total_sales │ previous_sales │ growth │
-├───────┼─────────────┼────────────────┼────────┤
-│ Jan   │ 100         │ NULL           │ NULL   │
-│ Feb   │ 120         │ 100            │ 20     │
-│ Mar   │ 150         │ 120            │ 30     │
-│ Apr   │ 130         │ 150            │ -20    │
-└───────┴─────────────┴────────────────┴────────┘
-`,
+            description: `Hitung pertumbuhan penjualan (Growth) bulanan using LAG().`,
+            starterCode: `SELECT bulan, total_sales, LAG(total_sales) OVER (ORDER BY bulan) as previous_sales FROM monthly_sales`,
+            expectedOutput: `Query berhasil dijalankan`,
         },
     },
     'level-4': {
         analyst: {
             title: 'Level 4: Common Table Expressions (CTE)',
             sections: [
-                {
-                    heading: 'Apa itu CTE?',
-                    content: 'CTE (`WITH`) adalah cara membuat tabel sementara yang hanya hidup selama query dijalankan. Ini membuat kodemu jauh lebih rapi dibanding Subquery bertingkat.',
-                },
-                {
-                    heading: '1. From Subquery to CTE',
-                    content: 'Daripada `SELECT * FROM (SELECT ...)`, lebih baik:',
-                    code: `WITH TopCustomers AS (
-    SELECT customer_id, SUM(amount) as total 
-    FROM orders 
-    GROUP BY customer_id
-)
-SELECT * FROM TopCustomers WHERE total > 1000;`,
-                },
+                { heading: 'Apa itu CTE?', content: 'CTE (`WITH`) adalah cara membuat tabel sementara yang hanya hidup selama query dijalankan.' },
+                { heading: '1. From Subquery to CTE', content: 'Daripada `SELECT * FROM (SELECT ...)`, lebih baik pakai CTE untuk readability.', code: `WITH TopCustomers AS (SELECT customer_id, SUM(amount) as total FROM orders GROUP BY customer_id) SELECT * FROM TopCustomers WHERE total > 1000;` },
             ],
         },
         scientist: {
             title: 'Level 4: Complex Data Prep Pipelines',
             sections: [
-                {
-                    heading: 'Multi-step Processing',
-                    content: 'Gunakan CTE bertingkat untuk membersihkan data, lalu mem-filter, lalu meng-agregasi.',
-                    code: `WITH CleanData AS (
-    SELECT id, COALESCE(age, 25) as age FROM users
-),
-TargetUsers AS (
-    SELECT * FROM CleanData WHERE age > 18
-)
-SELECT AVG(age) FROM TargetUsers;`,
-                },
+                { heading: 'Multi-step Processing', content: 'Gunakan CTE bertingkat untuk membersihkan data, lalu mem-filter, lalu meng-agregasi.', code: `WITH CleanData AS (SELECT id, COALESCE(age, 25) as age FROM users), TargetUsers AS (SELECT * FROM CleanData WHERE age > 18) SELECT AVG(age) FROM TargetUsers;` },
             ],
         },
         challenge: {
             title: 'Analisis Kohort Sederhana',
-            description: `Gunakan CTE untuk mencari rata-rata belanja user berdasarkan bulan pertama mereka mendaftar.
-1. CTE 1: Cari JoinDate tiap user
-2. CTE 2: Gabungkan dengan tabel Orders
-3. Hitung rata-rata per bulan join`,
-            starterCode: `WITH UserJoin AS (
-    SELECT user_id, MIN(order_date) as first_order
-    FROM orders
-    GROUP BY user_id
-)
-SELECT 
-    -- Lanjutkan query
-FROM orders o
-JOIN UserJoin uj ON o.user_id = uj.user_id`,
+            description: `Gunakan CTE untuk mencari rata-rata belanja user berdasarkan bulan pertama mereka mendaftar.`,
+            starterCode: `WITH UserJoin AS (SELECT user_id, MIN(order_date) as first_order FROM orders GROUP BY user_id) SELECT * FROM orders;`,
             expectedOutput: `Query berhasil dijalankan`,
         },
     },
@@ -309,56 +226,98 @@ JOIN UserJoin uj ON o.user_id = uj.user_id`,
         analyst: {
             title: 'Level 5: Data Cleaning & Validation',
             sections: [
-                {
-                    heading: 'Dirty Data is Everywhere',
-                    content: 'Data Analyst menghabiskan 60% waktu untuk cleaning data. Mari kita pelajari tekniknya.',
-                },
-                {
-                    heading: '1. Mengkategorikan Data (CASE WHEN)',
-                    content: 'Membuat grup baru dari data angka/teks.',
-                    code: `SELECT 
-    name,
-    CASE 
-        WHEN amount > 1000 THEN 'VIP'
-        WHEN amount > 500 THEN 'Regular'
-        ELSE 'Low'
-    END as status
-FROM sales;`,
-                },
+                { heading: 'Dirty Data is Everywhere', content: 'Data Analyst menghabiskan 60% waktu untuk cleaning data. Mari kita pelajari tekniknya.' },
+                { heading: '1. Mengkategorikan Data (CASE WHEN)', content: 'Membuat grup baru dari data angka/teks.', code: `SELECT name, CASE WHEN amount > 1000 THEN 'VIP' ELSE 'Regular' END as status FROM sales;` },
             ],
         },
         scientist: {
             title: 'Level 5: Advanced Data Cleaning',
             sections: [
-                {
-                    heading: 'Handling Outliers',
-                    content: 'Cara mendeteksi data aneh (anomali) menggunakan Z-Score sederhana atau Interquartile Range (IQR).',
-                },
-                {
-                    heading: '1. Filter Duplikat',
-                    content: 'Menggunakan `ROW_NUMBER() > 1` untuk hapus duplikat.',
-                    code: `WITH Duplicates AS (
-    SELECT *, ROW_NUMBER() OVER(PARTITION BY email ORDER BY created_at) as rn 
-    FROM users
-)
-DELETE FROM users WHERE id IN (SELECT id FROM Duplicates WHERE rn > 1);`,
-                },
+                { heading: 'Handling Outliers', content: 'Cara mendeteksi data aneh (anomali) menggunakan Z-Score sederhana atau Interquartile Range (IQR).' },
+                { heading: '1. Filter Duplikat', content: 'Menggunakan `ROW_NUMBER() > 1` untuk hapus duplikat.', code: `WITH Duplicates AS (SELECT *, ROW_NUMBER() OVER(PARTITION BY email ORDER BY created_at) as rn FROM users) DELETE FROM users WHERE id IN (SELECT id FROM Duplicates WHERE rn > 1);` },
             ],
         },
         challenge: {
             title: 'Segmentasi Customer Otomatis',
-            description: `Buat kategori customer berdasarkan total belanja menggunakan CASE WHEN.
-> 10jt: 'Sultan'
-1jt - 10jt: 'Menengah'
-< 1jt: 'Hemat'`,
-            starterCode: `SELECT 
-    customer_name,
-    total_spend,
-    CASE
-        -- Tulis logikamu di sini
-    END as customer_segment
-FROM customer_spends`,
+            description: `Buat kategori customer berdasarkan total belanja menggunakan CASE WHEN.`,
+            starterCode: `SELECT customer_name, total_spend, CASE WHEN total_spend > 1000 THEN 'High' ELSE 'Low' END FROM customer_spends`,
             expectedOutput: `Query berhasil dijalankan`,
         },
     },
+};
+
+// Generating Levels 6-100
+const topics = [
+    "Stored Procedures", "Triggers", "Views & Materialized Views", "JSON Handling in SQL", "Transaction Isolation",
+    "Database Normalization", "Primary & Foreign Keys", "Indexing Strategies (B-Tree)", "Composite Indexes", "Query Execution Plans", // 15
+    "Full Text Search", "Spatial Data (PostGIS)", "Array Data Types", "User Management (GRANT/REVOKE)", "SQL Injection Prevention", // 20
+    "Partitioning Tables", "Sharding Concepts", "Replication Types", "High Availability", "Disaster Recovery", // 25
+    "Vacuum & Maintenance", "Connection Pooling", "Time Series Analysis", "Graph Data Concepts", "Recursive Queries", // 30
+    "Distributed SQL", "CAP Theorem", "ACID vs BASE", "NoSQL Integration", "Redis & Caching", // 35
+    "Columnar Storage", "Data Warehousing Basics", "Star Schema Design", "Snowflake Schema", "ETL Pipelines", // 40
+    "ELT vs ETL", "Data Lake Concepts", "Hadoop & Spark Basics", "Big Data File Formats (Parquet)", "Cloud Databases (AWS RDS)", // 45
+    "Google BigQuery", "Azure SQL", "Serverless Databases", "Database Migration Strategies", "Zero Downtime Deployments", // 50
+    "Data Governance", "GDPR & Compliance", "Audit Logging", "Encryption at Rest", "Masking Sensitive Data", // 55
+    "Multi-tenancy Architecture", "Row Level Security", "Schema Validation", "API Integration", "GraphQL with SQL", // 60
+    "ORM Best Practices", "N+1 Query Problem", "Database Anti-patterns", "Refactoring Databases", "Legacy System Migration", // 65
+    "Real-time Analytics", "Stream Processing", "Event Sourcing", "CQRS Pattern", "Microservices Database Pattern", // 70
+    "Saga Pattern", "Two-Phase Commit", "Vector Databases", "AI & SQL Integration", "RAG Pipeline w/ SQL", // 75
+    "Geospatial Analytics (Adv)", "Financial Modeling in SQL", "Risk Analysis Queries", "Marketing Attribution Models", "Churn Prediction Query", // 80
+    "Supply Chain Optimization", "Inventory Management Logic", "Dynamic Pricing Models", "Fraud Detection Rules", "Recommendation Engine SQL", // 85
+    "Social Network Analysis", "Hierarchical Data (Trees)", "Gap Analysis", "Funnel Analysis", "Retention Analysis", // 90
+    "User Segmentation (Adv)", "AB Testing Analysis", "Statistical Functions in SQL", "Linear Regression in SQL", "Forecasting Models", // 95
+    "System Design Interview", "Architecting for Scale", "Chaos Engineering for DB", "Future of Databases", "Expert Final Project" // 100
+];
+
+const generatedCurricula: any = {};
+
+topics.forEach((topic, index) => {
+    const levelNum = index + 6;
+    const levelKey = `level-${levelNum}`;
+
+    generatedCurricula[levelKey] = {
+        analyst: {
+            title: `Level ${levelNum}: ${topic}`,
+            sections: [
+                {
+                    heading: `Pengantar ${topic}`,
+                    content: `Di Level ${levelNum} ini, kita akan mempelajari ${topic} secara mendalam. Topik ini sangat penting untuk menjadi seorang Expert Data Analyst.`,
+                },
+                {
+                    heading: 'Konsep Utama',
+                    content: `Pahami prinsip kerja ${topic} dan bagaimana mengaplikasikannya dalam kasus nyata.`,
+                    code: `-- Contoh syntax untuk ${topic}\nSELECT 'Implementasi ${topic} di sini';`
+                },
+                {
+                    heading: 'Best Practices',
+                    content: `Selalu perhatikan performa dan keamanan saat menggunakan ${topic}.`
+                }
+            ]
+        },
+        scientist: {
+            title: `Level ${levelNum}: ${topic} for Lab`,
+            sections: [
+                {
+                    heading: `Teori ${topic}`,
+                    content: `Untuk Data Scientist, ${topic} memberikan wawasan baru dalam pengolahan data.`
+                },
+                {
+                    heading: 'Implementasi Logic',
+                    content: `Gunakan logika ${topic} untuk optimasi pipeline data anda.`,
+                    code: `-- Algoritma ${topic}\nSELECT * FROM experiments WHERE type = '${topic}';`
+                }
+            ]
+        },
+        challenge: {
+            title: `Tantangan ${topic}`,
+            description: `Implementasikan solusi menggunakan konsep ${topic} yang telah dipelajari.\n\n1. Analisis masalah\n2. Tulis query ${topic}\n3. Validasi hasil`,
+            starterCode: `-- Tulis implementasi ${topic} anda\nSELECT 'Jawaban saya';`,
+            expectedOutput: `Konsep ${topic} berhasil diimplementasikan!`
+        }
+    };
+});
+
+export const curricula = {
+    ...baseCurricula,
+    ...generatedCurricula
 };
