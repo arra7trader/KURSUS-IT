@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import Editor from '@monaco-editor/react';
+import Link from 'next/link';
 import {
     ChevronDown,
     ChevronRight,
@@ -17,11 +18,11 @@ import {
     MessageSquare,
     Award,
     Zap,
-    Clock,
     Target,
     Lightbulb,
     BarChart3,
     Brain,
+    Home,
 } from 'lucide-react';
 
 // Types
@@ -60,55 +61,55 @@ interface GradeResult {
     passed: boolean;
 }
 
-// Mock data for curriculum
+// Data kurikulum (Bahasa Indonesia)
 const mockCurriculum: Level[] = [
     {
         id: 'level-1',
-        name: 'Level 1: SQL Fundamentals',
+        name: 'Level 1: Dasar-dasar SQL',
         modules: [
-            { id: 'm1', title: 'Introduction to Databases', type: 'video', completed: true, duration: '12 min' },
-            { id: 'm2', title: 'SELECT Statements', type: 'text', completed: true },
-            { id: 'm3', title: 'Challenge: Query Customer Data', type: 'challenge', completed: false },
+            { id: 'm1', title: 'Pengenalan Database', type: 'video', completed: true, duration: '12 menit' },
+            { id: 'm2', title: 'Perintah SELECT', type: 'text', completed: true },
+            { id: 'm3', title: 'Tantangan: Query Data Customer', type: 'challenge', completed: false },
         ],
     },
     {
         id: 'level-2',
-        name: 'Level 2: JOINs & Aggregations',
+        name: 'Level 2: JOIN & Agregasi',
         modules: [
-            { id: 'm4', title: 'Understanding JOINs', type: 'video', completed: false, duration: '18 min' },
+            { id: 'm4', title: 'Memahami JOIN', type: 'video', completed: false, duration: '18 menit' },
             { id: 'm5', title: 'GROUP BY & HAVING', type: 'text', completed: false },
-            { id: 'm6', title: 'Challenge: Sales Report', type: 'challenge', completed: false },
+            { id: 'm6', title: 'Tantangan: Laporan Penjualan', type: 'challenge', completed: false },
         ],
     },
     {
         id: 'level-3',
-        name: 'Level 3: Advanced Queries',
+        name: 'Level 3: Query Lanjutan',
         modules: [
-            { id: 'm7', title: 'Subqueries', type: 'video', completed: false, duration: '15 min' },
+            { id: 'm7', title: 'Subquery', type: 'video', completed: false, duration: '15 menit' },
             { id: 'm8', title: 'Window Functions', type: 'text', completed: false },
-            { id: 'm9', title: 'Challenge: Cohort Analysis', type: 'challenge', completed: false },
+            { id: 'm9', title: 'Tantangan: Analisis Cohort', type: 'challenge', completed: false },
         ],
     },
 ];
 
-// Challenge data
+// Data tantangan
 const mockChallenge = {
-    title: 'Query Customer Data',
-    description: `Write a SQL query to find the top 5 customers by total order value.
+    title: 'Query Data Customer',
+    description: `Tulis query SQL untuk menemukan 5 customer teratas berdasarkan total nilai order.
 
-Your query should:
-1. Join the customers and orders tables
-2. Calculate the total order value for each customer
-3. Return customer name and total value
-4. Order by total value descending
-5. Limit to top 5 results`,
-    starterCode: `-- Write your SQL query here
+Query kamu harus:
+1. Join tabel customers dan orders
+2. Hitung total nilai order untuk setiap customer
+3. Tampilkan nama customer dan total nilai
+4. Urutkan berdasarkan total nilai (terbesar dulu)
+5. Batasi hasil hanya 5 teratas`,
+    starterCode: `-- Tulis query SQL kamu di sini
 SELECT 
   c.customer_name,
-  -- Calculate total order value
+  -- Hitung total nilai order
 FROM customers c
 JOIN orders o ON c.customer_id = o.customer_id
--- Add your logic here
+-- Tambahkan logika di sini
 `,
     language: 'sql' as const,
 };
@@ -118,7 +119,7 @@ export default function LessonPage({
 }: {
     params: { track: string; levelId: string };
 }) {
-    const { track, levelId } = params;
+    const { track } = params;
     const isAnalyst = track === 'analyst';
     const mentor = isAnalyst ? 'Rendy' : 'Abdul';
 
@@ -137,8 +138,8 @@ export default function LessonPage({
             id: '1',
             role: 'assistant',
             content: isAnalyst
-                ? `Halo! Saya Rendy, mentor Data Analyst kamu. 👋\n\nSekarang kita akan belajar tentang SQL queries untuk mengambil data customer. Ingat, "Data is only useful if it makes money or saves time." Jadi pastikan query kamu efisien!\n\nAda yang bisa saya bantu?`
-                : `Welcome! I'm Abdul, your Data Science mentor. 👋\n\nToday we'll explore SQL fundamentals. Remember, "Understand the math behind the black box." Even in SQL, understanding query optimization complexity matters.\n\nHow can I assist you?`,
+                ? `Halo! Saya Rendy, mentor Data Analyst kamu. 👋\n\nSekarang kita bakal belajar tentang SQL queries untuk ngambil data customer. Ingat ya, "Data cuma berguna kalau bisa bikin duit atau hemat waktu." Jadi pastikan query kamu efisien!\n\nAda yang bisa saya bantu?`
+                : `Halo! Saya Abdul, mentor Data Science kamu. 👋\n\nHari ini kita akan explore dasar-dasar SQL. Ingat, "Pahami matematika di balik algoritmanya." Bahkan di SQL, memahami kompleksitas query itu penting.\n\nAda yang mau ditanyakan?`,
             timestamp: new Date(),
         },
     ]);
@@ -146,12 +147,12 @@ export default function LessonPage({
     const [isSendingChat, setIsSendingChat] = useState(false);
     const chatEndRef = useRef<HTMLDivElement>(null);
 
-    // Scroll to bottom of chat
+    // Scroll ke bawah chat
     useEffect(() => {
         chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [chatMessages]);
 
-    // Toggle level expansion
+    // Toggle level
     const toggleLevel = (levelId: string) => {
         setExpandedLevels((prev) =>
             prev.includes(levelId)
@@ -160,39 +161,36 @@ export default function LessonPage({
         );
     };
 
-    // Run code
+    // Jalankan code
     const handleRunCode = async () => {
         setIsRunning(true);
-        setOutput('Executing query...\n');
+        setOutput('Menjalankan query...\n');
 
-        // Simulate execution
         await new Promise((r) => setTimeout(r, 1500));
 
-        setOutput(`> Query executed successfully
+        setOutput(`> Query berhasil dijalankan
     
 ┌────────────────────┬──────────────┐
 │ customer_name      │ total_value  │
 ├────────────────────┼──────────────┤
-│ Acme Corporation   │ $125,450.00  │
-│ Tech Solutions     │ $98,230.50   │
-│ Global Industries  │ $87,100.00   │
-│ Prime Retail       │ $72,890.25   │
-│ Metro Services     │ $65,420.00   │
+│ Acme Corporation   │ Rp125.450    │
+│ Tech Solutions     │ Rp98.230     │
+│ Global Industries  │ Rp87.100     │
+│ Prime Retail       │ Rp72.890     │
+│ Metro Services     │ Rp65.420     │
 └────────────────────┴──────────────┘
 
-5 rows returned in 0.042s`);
+5 baris dalam 0.042 detik`);
         setIsRunning(false);
     };
 
-    // Submit for grading
+    // Submit untuk grading
     const handleSubmit = async () => {
         setIsGrading(true);
         setGradeResult(null);
 
-        // Simulate API call to grading service
         await new Promise((r) => setTimeout(r, 2500));
 
-        // Mock grade result
         setGradeResult({
             score: 85,
             criteria: {
@@ -201,23 +199,23 @@ export default function LessonPage({
                 style: 13,
                 business_insight: 14,
             },
-            feedback_text: "Great job! Your query correctly identifies the top 5 customers by total order value. The JOIN and aggregation logic is sound. Consider using table aliases consistently for better readability.",
+            feedback_text: "Kerja bagus! Query kamu berhasil mengidentifikasi 5 customer teratas berdasarkan total nilai order. Logika JOIN dan agregasinya sudah benar. Coba gunakan table alias secara konsisten biar lebih mudah dibaca.",
             strengths: [
-                "Correct use of JOIN between customers and orders",
-                "Proper GROUP BY clause",
-                "Good use of ORDER BY and LIMIT",
+                "Penggunaan JOIN antara customers dan orders sudah benar",
+                "Clause GROUP BY sudah tepat",
+                "Penggunaan ORDER BY dan LIMIT sudah bagus",
             ],
             improvements: [
-                "Add column alias for SUM(order_value) as 'total_value'",
-                "Consider adding a WHERE clause to filter out cancelled orders",
-                "Use consistent table aliasing throughout",
+                "Tambahkan alias kolom untuk SUM(order_value) jadi 'total_value'",
+                "Pertimbangkan menambah WHERE untuk filter order yang dibatalkan",
+                "Gunakan alias tabel secara konsisten",
             ],
             passed: true,
         });
         setIsGrading(false);
     };
 
-    // Send chat message
+    // Kirim pesan chat
     const handleSendChat = async () => {
         if (!chatInput.trim()) return;
 
@@ -232,15 +230,14 @@ export default function LessonPage({
         setChatInput('');
         setIsSendingChat(true);
 
-        // Simulate AI response
         await new Promise((r) => setTimeout(r, 1500));
 
         const aiResponse: ChatMessage = {
             id: (Date.now() + 1).toString(),
             role: 'assistant',
             content: isAnalyst
-                ? `Pertanyaan bagus! 👍\n\nUntuk masalah ini, kamu perlu menggunakan SUM() untuk menghitung total. Contoh:\n\n\`\`\`sql\nSUM(o.order_value) AS total_value\n\`\`\`\n\nIngat, pastikan query-nya cepat karena di dunia nyata, CEO tidak mau menunggu lama untuk laporan!`
-                : `Excellent question! Let me break this down mathematically.\n\nThe aggregation function SUM() has O(n) complexity where n is the number of rows. With proper indexing on the JOIN columns, your query complexity becomes O(n log n).\n\n\`\`\`sql\nSUM(o.order_value) AS total_value\n\`\`\`\n\nWhat's the Big O of your current approach?`,
+                ? `Pertanyaan bagus! 👍\n\nUntuk masalah ini, kamu perlu pakai SUM() untuk hitung total. Contoh:\n\n\`\`\`sql\nSUM(o.order_value) AS total_value\n\`\`\`\n\nIngat ya, pastikan query-nya cepat karena di dunia nyata, bos gak mau nunggu lama buat laporan!`
+                : `Pertanyaan bagus! Mari kita breakdown secara matematis.\n\nFungsi agregasi SUM() punya kompleksitas O(n) di mana n adalah jumlah baris. Dengan indexing yang tepat di kolom JOIN, kompleksitas query jadi O(n log n).\n\n\`\`\`sql\nSUM(o.order_value) AS total_value\n\`\`\`\n\nBerapa Big O dari approach kamu sekarang?`,
             timestamp: new Date(),
         };
 
@@ -248,83 +245,81 @@ export default function LessonPage({
         setIsSendingChat(false);
     };
 
-    // Theme colors based on track
+    // Warna tema berdasarkan track
     const theme = isAnalyst
         ? {
-            primary: 'analyst',
-            accent: 'cyan',
-            bg: 'from-analyst-900/20 to-gray-900',
-            border: 'border-analyst-500/20',
-            text: 'text-analyst-400',
-            button: 'bg-analyst-600 hover:bg-analyst-500',
+            primary: 'blue',
+            gradient: 'from-blue-600 to-cyan-500',
+            bg: 'bg-blue-50',
+            border: 'border-blue-200',
+            text: 'text-blue-600',
+            button: 'bg-blue-600 hover:bg-blue-500',
             icon: BarChart3,
         }
         : {
-            primary: 'scientist',
-            accent: 'pink',
-            bg: 'from-scientist-900/20 to-gray-900',
-            border: 'border-scientist-500/20',
-            text: 'text-scientist-400',
-            button: 'bg-scientist-600 hover:bg-scientist-500',
+            primary: 'purple',
+            gradient: 'from-purple-600 to-pink-500',
+            bg: 'bg-purple-50',
+            border: 'border-purple-200',
+            text: 'text-purple-600',
+            button: 'bg-purple-600 hover:bg-purple-500',
             icon: Brain,
         };
 
     return (
-        <div className="min-h-screen bg-gray-950">
+        <div className="min-h-screen bg-gray-50">
             {/* Header */}
-            <header className={`border-b ${theme.border} bg-gray-900/80 backdrop-blur-xl sticky top-0 z-50`}>
+            <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
                 <div className="flex items-center justify-between px-6 py-3">
                     <div className="flex items-center gap-4">
-                        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br from-${theme.primary}-500 to-${theme.primary}-600 flex items-center justify-center`}>
+                        <Link href="/" className="flex items-center gap-2 text-gray-500 hover:text-gray-700">
+                            <Home className="w-5 h-5" />
+                        </Link>
+                        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${theme.gradient} flex items-center justify-center`}>
                             <theme.icon className="w-5 h-5 text-white" />
                         </div>
                         <div>
-                            <h1 className="text-white font-semibold">{mockChallenge.title}</h1>
-                            <p className="text-gray-500 text-sm">Level 1 • SQL Fundamentals</p>
+                            <h1 className="text-gray-900 font-semibold">{mockChallenge.title}</h1>
+                            <p className="text-gray-500 text-sm">Level 1 • Dasar-dasar SQL</p>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-800">
+                        <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${theme.bg}`}>
                             <div className={`w-2 h-2 rounded-full bg-${theme.primary}-500`} />
-                            <span className="text-sm text-gray-300">Mentor: {mentor}</span>
+                            <span className={`text-sm ${theme.text}`}>Mentor: {mentor}</span>
                         </div>
-                        <button className={`px-4 py-2 rounded-lg ${theme.button} text-white font-medium transition-colors`}>
-                            Save Progress
-                        </button>
                     </div>
                 </div>
             </header>
 
             {/* Main Content - 3 Column Grid */}
             <main className="grid grid-cols-12 gap-0 h-[calc(100vh-65px)]">
-                {/* Left Column - Curriculum & Chat */}
-                <div className={`col-span-3 border-r ${theme.border} flex flex-col bg-gray-900/50`}>
-                    {/* Curriculum Section */}
-                    <div className="flex-1 overflow-y-auto p-4 border-b border-gray-800">
+                {/* Kolom Kiri - Kurikulum & Chat */}
+                <div className="col-span-3 border-r border-gray-200 flex flex-col bg-white">
+                    {/* Section Kurikulum */}
+                    <div className="flex-1 overflow-y-auto p-4 border-b border-gray-200">
                         <div className="flex items-center gap-2 mb-4">
                             <BookOpen className={`w-5 h-5 ${theme.text}`} />
-                            <h2 className="text-white font-semibold">Curriculum</h2>
+                            <h2 className="text-gray-900 font-semibold">Kurikulum</h2>
                         </div>
 
                         <div className="space-y-2">
                             {mockCurriculum.map((level) => (
                                 <div key={level.id} className="rounded-lg overflow-hidden">
-                                    {/* Level Header */}
                                     <button
                                         onClick={() => toggleLevel(level.id)}
-                                        className={`w-full flex items-center gap-2 p-3 text-left hover:bg-gray-800/50 transition-colors ${expandedLevels.includes(level.id) ? 'bg-gray-800/30' : ''
+                                        className={`w-full flex items-center gap-2 p-3 text-left hover:bg-gray-50 transition-colors ${expandedLevels.includes(level.id) ? 'bg-gray-50' : ''
                                             }`}
                                     >
                                         {expandedLevels.includes(level.id) ? (
-                                            <ChevronDown className="w-4 h-4 text-gray-500" />
+                                            <ChevronDown className="w-4 h-4 text-gray-400" />
                                         ) : (
-                                            <ChevronRight className="w-4 h-4 text-gray-500" />
+                                            <ChevronRight className="w-4 h-4 text-gray-400" />
                                         )}
-                                        <span className="text-sm text-gray-300 font-medium">{level.name}</span>
+                                        <span className="text-sm text-gray-700 font-medium">{level.name}</span>
                                     </button>
 
-                                    {/* Modules */}
                                     <AnimatePresence>
                                         {expandedLevels.includes(level.id) && (
                                             <motion.div
@@ -339,8 +334,8 @@ export default function LessonPage({
                                                         <div
                                                             key={module.id}
                                                             className={`flex items-center gap-2 p-2 rounded-md cursor-pointer transition-colors ${module.type === 'challenge' && !module.completed
-                                                                    ? `bg-${theme.primary}-500/10 border border-${theme.primary}-500/20`
-                                                                    : 'hover:bg-gray-800/50'
+                                                                ? `${theme.bg} ${theme.border} border`
+                                                                : 'hover:bg-gray-50'
                                                                 }`}
                                                         >
                                                             {module.completed ? (
@@ -348,13 +343,13 @@ export default function LessonPage({
                                                             ) : module.type === 'challenge' ? (
                                                                 <Code2 className={`w-4 h-4 ${theme.text}`} />
                                                             ) : (
-                                                                <div className="w-4 h-4 rounded-full border border-gray-600" />
+                                                                <div className="w-4 h-4 rounded-full border border-gray-300" />
                                                             )}
-                                                            <span className={`text-sm ${module.completed ? 'text-gray-500' : 'text-gray-300'}`}>
+                                                            <span className={`text-sm ${module.completed ? 'text-gray-400' : 'text-gray-700'}`}>
                                                                 {module.title}
                                                             </span>
                                                             {module.duration && (
-                                                                <span className="text-xs text-gray-600 ml-auto">{module.duration}</span>
+                                                                <span className="text-xs text-gray-400 ml-auto">{module.duration}</span>
                                                             )}
                                                         </div>
                                                     ))}
@@ -367,15 +362,15 @@ export default function LessonPage({
                         </div>
                     </div>
 
-                    {/* Chat Section */}
+                    {/* Section Chat */}
                     <div className="h-[45%] flex flex-col">
-                        <div className={`flex items-center gap-2 px-4 py-3 border-b ${theme.border}`}>
+                        <div className={`flex items-center gap-2 px-4 py-3 border-b border-gray-200`}>
                             <MessageSquare className={`w-5 h-5 ${theme.text}`} />
-                            <h2 className="text-white font-semibold">Chat with {mentor}</h2>
+                            <h2 className="text-gray-900 font-semibold">Chat dengan {mentor}</h2>
                         </div>
 
-                        {/* Chat Messages */}
-                        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                        {/* Pesan Chat */}
+                        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
                             {chatMessages.map((msg) => (
                                 <div
                                     key={msg.id}
@@ -383,8 +378,8 @@ export default function LessonPage({
                                 >
                                     <div
                                         className={`max-w-[85%] rounded-2xl px-4 py-3 ${msg.role === 'user'
-                                                ? `bg-${theme.primary}-600 text-white`
-                                                : 'bg-gray-800 text-gray-200'
+                                            ? `${theme.button} text-white`
+                                            : 'bg-white border border-gray-200 text-gray-700'
                                             }`}
                                     >
                                         <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
@@ -393,7 +388,7 @@ export default function LessonPage({
                             ))}
                             {isSendingChat && (
                                 <div className="flex justify-start">
-                                    <div className="bg-gray-800 rounded-2xl px-4 py-3">
+                                    <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3">
                                         <Loader2 className="w-5 h-5 text-gray-400 animate-spin" />
                                     </div>
                                 </div>
@@ -401,16 +396,16 @@ export default function LessonPage({
                             <div ref={chatEndRef} />
                         </div>
 
-                        {/* Chat Input */}
-                        <div className="p-4 border-t border-gray-800">
+                        {/* Input Chat */}
+                        <div className="p-4 bg-white border-t border-gray-200">
                             <div className="flex gap-2">
                                 <input
                                     type="text"
                                     value={chatInput}
                                     onChange={(e) => setChatInput(e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && handleSendChat()}
-                                    placeholder={`Ask ${mentor} for help...`}
-                                    className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-gray-600"
+                                    placeholder={`Tanya ${mentor}...`}
+                                    className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:border-gray-300"
                                 />
                                 <button
                                     onClick={handleSendChat}
@@ -424,21 +419,21 @@ export default function LessonPage({
                     </div>
                 </div>
 
-                {/* Middle Column - Code Editor */}
-                <div className="col-span-5 flex flex-col bg-gray-950">
-                    {/* Challenge Description */}
-                    <div className={`p-4 border-b ${theme.border} bg-gray-900/30`}>
-                        <h3 className="text-white font-semibold mb-2">{mockChallenge.title}</h3>
-                        <p className="text-gray-400 text-sm whitespace-pre-line">{mockChallenge.description}</p>
+                {/* Kolom Tengah - Code Editor */}
+                <div className="col-span-5 flex flex-col bg-white">
+                    {/* Deskripsi Tantangan */}
+                    <div className={`p-4 border-b border-gray-200 ${theme.bg}`}>
+                        <h3 className="text-gray-900 font-semibold mb-2">{mockChallenge.title}</h3>
+                        <p className="text-gray-600 text-sm whitespace-pre-line">{mockChallenge.description}</p>
                     </div>
 
-                    {/* Editor Header */}
-                    <div className="flex items-center justify-between px-4 py-2 border-b border-gray-800 bg-gray-900/50">
+                    {/* Header Editor */}
+                    <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 bg-gray-50">
                         <div className="flex items-center gap-4">
                             <select
                                 value={language}
                                 onChange={(e) => setLanguage(e.target.value as 'python' | 'sql')}
-                                className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none"
+                                className="bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-gray-700 focus:outline-none"
                             >
                                 <option value="sql">SQL</option>
                                 <option value="python">Python</option>
@@ -455,7 +450,7 @@ export default function LessonPage({
                             ) : (
                                 <Play className="w-4 h-4" />
                             )}
-                            Run Code
+                            Jalankan
                         </button>
                     </div>
 
@@ -482,26 +477,26 @@ export default function LessonPage({
                     </div>
                 </div>
 
-                {/* Right Column - Output & Feedback */}
-                <div className={`col-span-4 border-l ${theme.border} flex flex-col bg-gray-900/30`}>
-                    {/* Output Section */}
+                {/* Kolom Kanan - Output & Feedback */}
+                <div className="col-span-4 border-l border-gray-200 flex flex-col bg-white">
+                    {/* Section Output */}
                     <div className="flex-1 flex flex-col">
-                        <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-800">
+                        <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-200 bg-gray-50">
                             <Terminal className="w-5 h-5 text-gray-500" />
-                            <h2 className="text-white font-semibold">Output</h2>
+                            <h2 className="text-gray-900 font-semibold">Output</h2>
                         </div>
 
-                        <div className="flex-1 p-4 font-mono text-sm overflow-auto">
+                        <div className="flex-1 p-4 font-mono text-sm overflow-auto bg-gray-900">
                             {output ? (
                                 <pre className="text-green-400 whitespace-pre-wrap">{output}</pre>
                             ) : (
-                                <p className="text-gray-600">Run your code to see output here...</p>
+                                <p className="text-gray-500">Jalankan code untuk lihat output di sini...</p>
                             )}
                         </div>
                     </div>
 
-                    {/* Submit Section */}
-                    <div className={`border-t ${theme.border} p-4`}>
+                    {/* Section Submit */}
+                    <div className="border-t border-gray-200 p-4">
                         <button
                             onClick={handleSubmit}
                             disabled={isGrading}
@@ -510,30 +505,30 @@ export default function LessonPage({
                             {isGrading ? (
                                 <>
                                     <Loader2 className="w-5 h-5 animate-spin" />
-                                    AI is grading...
+                                    AI sedang menilai...
                                 </>
                             ) : (
                                 <>
                                     <Zap className="w-5 h-5" />
-                                    Submit for AI Grading
+                                    Submit untuk Dinilai AI
                                 </>
                             )}
                         </button>
                     </div>
 
-                    {/* Grade Card */}
+                    {/* Kartu Nilai */}
                     <AnimatePresence>
                         {gradeResult && (
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 20 }}
-                                className={`border-t ${theme.border} p-4 max-h-[50%] overflow-y-auto`}
+                                className="border-t border-gray-200 p-4 max-h-[50%] overflow-y-auto"
                             >
-                                {/* Score Header */}
+                                {/* Header Nilai */}
                                 <div className={`flex items-center justify-between p-4 rounded-xl mb-4 ${gradeResult.passed
-                                        ? 'bg-green-500/10 border border-green-500/20'
-                                        : 'bg-red-500/10 border border-red-500/20'
+                                    ? 'bg-green-50 border border-green-200'
+                                    : 'bg-red-50 border border-red-200'
                                     }`}>
                                     <div className="flex items-center gap-3">
                                         {gradeResult.passed ? (
@@ -542,35 +537,35 @@ export default function LessonPage({
                                             <XCircle className="w-8 h-8 text-red-500" />
                                         )}
                                         <div>
-                                            <div className={`text-lg font-bold ${gradeResult.passed ? 'text-green-400' : 'text-red-400'}`}>
-                                                {gradeResult.passed ? 'Passed!' : 'Not Yet'}
+                                            <div className={`text-lg font-bold ${gradeResult.passed ? 'text-green-600' : 'text-red-600'}`}>
+                                                {gradeResult.passed ? 'Lulus!' : 'Belum Lulus'}
                                             </div>
-                                            <div className="text-sm text-gray-400">Minimum: 70 points</div>
+                                            <div className="text-sm text-gray-500">Minimum: 70 poin</div>
                                         </div>
                                     </div>
                                     <div className="text-right">
-                                        <div className="text-4xl font-bold text-white">{gradeResult.score}</div>
+                                        <div className="text-4xl font-bold text-gray-900">{gradeResult.score}</div>
                                         <div className="text-sm text-gray-500">/ 100</div>
                                     </div>
                                 </div>
 
-                                {/* Criteria Breakdown */}
+                                {/* Breakdown Nilai */}
                                 <div className="space-y-3 mb-4">
-                                    <h4 className="text-white font-semibold text-sm">Score Breakdown</h4>
+                                    <h4 className="text-gray-900 font-semibold text-sm">Rincian Nilai</h4>
                                     {[
-                                        { label: 'Correctness', value: gradeResult.criteria.correctness, max: 40, icon: Target },
-                                        { label: 'Efficiency', value: gradeResult.criteria.efficiency, max: 25, icon: Zap },
-                                        { label: 'Style', value: gradeResult.criteria.style, max: 15, icon: Code2 },
-                                        { label: 'Business Insight', value: gradeResult.criteria.business_insight, max: 20, icon: Lightbulb },
+                                        { label: 'Kebenaran', value: gradeResult.criteria.correctness, max: 40, icon: Target },
+                                        { label: 'Efisiensi', value: gradeResult.criteria.efficiency, max: 25, icon: Zap },
+                                        { label: 'Gaya Penulisan', value: gradeResult.criteria.style, max: 15, icon: Code2 },
+                                        { label: 'Pemahaman Bisnis', value: gradeResult.criteria.business_insight, max: 20, icon: Lightbulb },
                                     ].map((item) => (
                                         <div key={item.label} className="flex items-center gap-3">
-                                            <item.icon className="w-4 h-4 text-gray-500" />
+                                            <item.icon className="w-4 h-4 text-gray-400" />
                                             <div className="flex-1">
                                                 <div className="flex justify-between text-sm mb-1">
-                                                    <span className="text-gray-400">{item.label}</span>
-                                                    <span className="text-white">{item.value}/{item.max}</span>
+                                                    <span className="text-gray-600">{item.label}</span>
+                                                    <span className="text-gray-900 font-medium">{item.value}/{item.max}</span>
                                                 </div>
-                                                <div className="h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                                                <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
                                                     <div
                                                         className={`h-full bg-${theme.primary}-500 rounded-full transition-all duration-500`}
                                                         style={{ width: `${(item.value / item.max) * 100}%` }}
@@ -583,20 +578,20 @@ export default function LessonPage({
 
                                 {/* Feedback */}
                                 <div className="space-y-3">
-                                    <div className="p-3 rounded-lg bg-gray-800/50">
-                                        <h4 className="text-white font-semibold text-sm mb-2">AI Feedback</h4>
-                                        <p className="text-gray-300 text-sm">{gradeResult.feedback_text}</p>
+                                    <div className="p-3 rounded-lg bg-gray-50 border border-gray-200">
+                                        <h4 className="text-gray-900 font-semibold text-sm mb-2">Feedback AI</h4>
+                                        <p className="text-gray-600 text-sm">{gradeResult.feedback_text}</p>
                                     </div>
 
-                                    {/* Strengths */}
-                                    <div className="p-3 rounded-lg bg-green-500/5 border border-green-500/10">
-                                        <h4 className="text-green-400 font-semibold text-sm mb-2 flex items-center gap-2">
+                                    {/* Kelebihan */}
+                                    <div className="p-3 rounded-lg bg-green-50 border border-green-200">
+                                        <h4 className="text-green-700 font-semibold text-sm mb-2 flex items-center gap-2">
                                             <CheckCircle2 className="w-4 h-4" />
-                                            Strengths
+                                            Kelebihan
                                         </h4>
                                         <ul className="space-y-1">
                                             {gradeResult.strengths.map((s, i) => (
-                                                <li key={i} className="text-gray-300 text-sm flex items-start gap-2">
+                                                <li key={i} className="text-gray-600 text-sm flex items-start gap-2">
                                                     <span className="text-green-500 mt-1">•</span>
                                                     {s}
                                                 </li>
@@ -604,15 +599,15 @@ export default function LessonPage({
                                         </ul>
                                     </div>
 
-                                    {/* Improvements */}
-                                    <div className="p-3 rounded-lg bg-yellow-500/5 border border-yellow-500/10">
-                                        <h4 className="text-yellow-400 font-semibold text-sm mb-2 flex items-center gap-2">
+                                    {/* Saran Perbaikan */}
+                                    <div className="p-3 rounded-lg bg-yellow-50 border border-yellow-200">
+                                        <h4 className="text-yellow-700 font-semibold text-sm mb-2 flex items-center gap-2">
                                             <Lightbulb className="w-4 h-4" />
-                                            Improvements
+                                            Saran Perbaikan
                                         </h4>
                                         <ul className="space-y-1">
                                             {gradeResult.improvements.map((s, i) => (
-                                                <li key={i} className="text-gray-300 text-sm flex items-start gap-2">
+                                                <li key={i} className="text-gray-600 text-sm flex items-start gap-2">
                                                     <span className="text-yellow-500 mt-1">•</span>
                                                     {s}
                                                 </li>
